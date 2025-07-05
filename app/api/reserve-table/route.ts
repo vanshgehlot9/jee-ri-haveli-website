@@ -1,26 +1,41 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import { db } from '@/lib/firebase'
+import { collection, addDoc, Timestamp } from 'firebase/firestore'
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json()
-    const { name, email, phone, date, time, guests } = data
+    const { name, email, phone, date, time, guests, specialRequests } = data
     if (!name || !email || !phone || !date || !time || !guests) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
-    const client = await clientPromise
-    const db = client.db("jeerihaveli")
-    await db.collection("table_reservations").insertOne({
+
+    // Create table reservation
+    const reservationData = {
       name,
       email,
       phone,
-      date,
+      date: Timestamp.fromDate(new Date(date)),
       time,
-      guests,
-      createdAt: new Date()
+      guests: parseInt(guests),
+      specialRequests: specialRequests || '',
+      status: 'confirmed',
+      createdAt: Timestamp.now(),
+      reservationId: `TR${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`
+    }
+
+    const docRef = await addDoc(collection(db, 'tableReservations'), reservationData)
+
+    return NextResponse.json({
+      success: true,
+      reservationId: reservationData.reservationId,
+      message: 'Table reservation confirmed successfully!'
     })
-    return NextResponse.json({ success: true })
-  } catch (e) {
-    return NextResponse.json({ error: "Server error" }, { status: 500 })
+  } catch (error) {
+    console.error('Table reservation error:', error)
+    return NextResponse.json(
+      { error: 'Failed to create table reservation' },
+      { status: 500 }
+    )
   }
 } 

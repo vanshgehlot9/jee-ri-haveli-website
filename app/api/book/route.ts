@@ -1,59 +1,78 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import { db } from '@/lib/firebase'
+import { collection, addDoc, query, where, getDocs, Timestamp } from 'firebase/firestore'
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json()
-    const { checkIn, checkOut, roomType, adults, children, name, email, phone } = data
-    if (!checkIn || !checkOut || !roomType || !name || !email || !phone) {
+    const { checkIn, checkOut, roomType, guests, name, email, phone, specialRequests, checkOnly } = data
+    if (!checkIn || !checkOut || !roomType) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
-    const client = await clientPromise
-    const db = client.db("jeerihaveli")
-    const bookings = db.collection("bookings")
-    const unavailable = db.collection("unavailable")
 
-    // Check for overlapping unavailable periods
-    const unavail = await unavailable.findOne({
-      roomType,
-      $or: [
-        { start: { $lte: checkOut }, end: { $gte: checkIn } },
-        { start: { $gte: checkIn, $lte: checkOut } },
-        { end: { $gte: checkIn, $lte: checkOut } }
-      ]
+    // Check for conflicting bookings
+    const bookingsRef = collection(db, 'bookings')
+    const q = query(
+      bookingsRef,
+      where('roomType', '==', roomType),
+      where('status', '==', 'confirmed')
+    )
+    
+    const querySnapshot = await getDocs(q)
+    const conflictingBookings = querySnapshot.docs.filter(doc => {
+      const booking = doc.data()
+      const bookingCheckIn = booking.checkIn.toDate()
+      const bookingCheckOut = booking.checkOut.toDate()
+      const newCheckIn = new Date(checkIn)
+      const newCheckOut = new Date(checkOut)
+      
+      return (
+        (newCheckIn >= bookingCheckIn && newCheckIn < bookingCheckOut) ||
+        (newCheckOut > bookingCheckIn && newCheckOut <= bookingCheckOut) ||
+        (newCheckIn <= bookingCheckIn && newCheckOut >= bookingCheckOut)
+      )
     })
-    if (unavail) {
-      return NextResponse.json({ error: "Room is unavailable for selected dates." }, { status: 409 })
+
+    if (checkOnly) {
+      if (conflictingBookings.length > 0) {
+        return NextResponse.json({ available: false, error: 'Room is not available for the selected dates' })
+      }
+      return NextResponse.json({ available: true })
     }
 
-    // Check for overlapping bookings for the same room type
-    const overlap = await bookings.findOne({
-      roomType,
-      cancelled: { $ne: true },
-      $or: [
-        { checkIn: { $lte: checkOut }, checkOut: { $gte: checkIn } },
-        { checkIn: { $gte: checkIn, $lte: checkOut } },
-        { checkOut: { $gte: checkIn, $lte: checkOut } }
-      ]
-    })
-    if (overlap) {
-      return NextResponse.json({ error: "Room not available for selected dates." }, { status: 409 })
+    // Validate required fields for booking
+    if (!name || !email || !phone || !guests) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    // Save booking
-    await bookings.insertOne({
-      checkIn,
-      checkOut,
-      roomType,
-      adults,
-      children,
+    if (conflictingBookings.length > 0) {
+      return NextResponse.json({ error: 'Room is not available for the selected dates' }, { status: 409 })
+    }
+
+    // Create new booking
+    const bookingData = {
       name,
       email,
       phone,
-      createdAt: new Date()
+      checkIn: Timestamp.fromDate(new Date(checkIn)),
+      checkOut: Timestamp.fromDate(new Date(checkOut)),
+      guests: parseInt(guests),
+      roomType,
+      specialRequests: specialRequests || '',
+      status: 'confirmed',
+      createdAt: Timestamp.now(),
+      bookingId: `BK${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`
+    }
+
+    const docRef = await addDoc(collection(db, 'bookings'), bookingData)
+
+    return NextResponse.json({
+      success: true,
+      bookingId: bookingData.bookingId,
+      message: 'Booking confirmed successfully!'
     })
-    return NextResponse.json({ success: true })
   } catch (e) {
-    return NextResponse.json({ error: "Server error" }, { status: 500 })
+    console.error('Booking error:', e)
+    return NextResponse.json({ error: 'Failed to create booking' }, { status: 500 })
   }
 } 

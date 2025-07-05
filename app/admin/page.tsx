@@ -2,6 +2,11 @@
 
 import { useState, useEffect } from "react"
 
+const rooms = [
+  { name: "Deluxe Room", price: "₹2,500" },
+  { name: "Standard Room", price: "₹1,800" }
+]
+
 export default function AdminPage() {
   const [password, setPassword] = useState("")
   const [loggedIn, setLoggedIn] = useState(false)
@@ -36,10 +41,10 @@ export default function AdminPage() {
     try {
       const res = await fetch("/api/admin/bookings")
       const data = await res.json()
-      if (data.success) {
-        setBookings(data.bookings)
+      if (Array.isArray(data)) {
+        setBookings(data)
       } else {
-        setError(data.error || "Failed to fetch bookings")
+        setError("Failed to fetch bookings")
       }
     } catch {
       setError("Failed to fetch bookings")
@@ -52,7 +57,11 @@ export default function AdminPage() {
     setLoading(true)
     setError("")
     try {
-      const res = await fetch(`/api/admin/bookings/${id}/cancel`, { method: "PATCH" })
+      const res = await fetch("/api/admin/bookings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status: "cancelled" })
+      })
       const data = await res.json()
       if (data.success) {
         fetchBookings()
@@ -67,7 +76,9 @@ export default function AdminPage() {
 
   // Calculate room availability summary
   const roomSummary = bookings.reduce((acc, b) => {
-    acc[b.roomType] = (acc[b.roomType] || 0) + 1
+    if (b.status !== 'cancelled') {
+      acc[b.roomType] = (acc[b.roomType] || 0) + 1
+    }
     return acc
   }, {} as Record<string, number>)
 
@@ -120,10 +131,10 @@ export default function AdminPage() {
     try {
       const res = await fetch("/api/admin/table-reservations")
       const data = await res.json()
-      if (data.success) {
-        setTableReservations(data.reservations)
+      if (Array.isArray(data)) {
+        setTableReservations(data)
       } else {
-        setTableError(data.error || "Failed to fetch reservations")
+        setTableError("Failed to fetch reservations")
       }
     } catch {
       setTableError("Failed to fetch reservations")
@@ -187,31 +198,37 @@ export default function AdminPage() {
                   <th className="p-2 border">Room</th>
                   <th className="p-2 border">Check In</th>
                   <th className="p-2 border">Check Out</th>
-                  <th className="p-2 border">Adults</th>
-                  <th className="p-2 border">Children</th>
+                  <th className="p-2 border">Guests</th>
+                  <th className="p-2 border">Status</th>
                   <th className="p-2 border">Booked At</th>
                   <th className="p-2 border">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {bookings.map((b, i) => (
-                  <tr key={i} className={b.cancelled ? "bg-red-100" : ""}>
+                  <tr key={b.id || i} className={b.status === 'cancelled' ? "bg-red-100" : ""}>
                     <td className="p-2 border">{b.name}</td>
                     <td className="p-2 border">{b.email}</td>
                     <td className="p-2 border">{b.phone}</td>
                     <td className="p-2 border">{b.roomType}</td>
-                    <td className="p-2 border">{b.checkIn}</td>
-                    <td className="p-2 border">{b.checkOut}</td>
-                    <td className="p-2 border">{b.adults}</td>
-                    <td className="p-2 border">{b.children}</td>
+                    <td className="p-2 border">{b.checkIn ? new Date(b.checkIn).toLocaleDateString() : ""}</td>
+                    <td className="p-2 border">{b.checkOut ? new Date(b.checkOut).toLocaleDateString() : ""}</td>
+                    <td className="p-2 border">{b.guests}</td>
+                    <td className="p-2 border">
+                      <span className={`px-2 py-1 rounded text-xs font-bold ${
+                        b.status === 'cancelled' ? 'bg-red-200 text-red-800' : 'bg-green-200 text-green-800'
+                      }`}>
+                        {b.status}
+                      </span>
+                    </td>
                     <td className="p-2 border">{b.createdAt ? new Date(b.createdAt).toLocaleString() : ""}</td>
                     <td className="p-2 border">
-                      {b.cancelled ? (
+                      {b.status === 'cancelled' ? (
                         <span className="text-red-600 font-bold">Cancelled</span>
                       ) : (
                         <button
                           className="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold hover:bg-red-700"
-                          onClick={() => handleCancel(b._id)}
+                          onClick={() => handleCancel(b.id)}
                           disabled={loading}
                         >
                           Cancel
@@ -286,18 +303,24 @@ export default function AdminPage() {
                   <th className="p-2 border">Date</th>
                   <th className="p-2 border">Time</th>
                   <th className="p-2 border">Guests</th>
+                  <th className="p-2 border">Status</th>
                   <th className="p-2 border">Reserved At</th>
                 </tr>
               </thead>
               <tbody>
                 {tableReservations.map((r, i) => (
-                  <tr key={i}>
+                  <tr key={r.id || i}>
                     <td className="p-2 border">{r.name}</td>
                     <td className="p-2 border">{r.email}</td>
                     <td className="p-2 border">{r.phone}</td>
-                    <td className="p-2 border">{r.date}</td>
+                    <td className="p-2 border">{r.date ? new Date(r.date).toLocaleDateString() : ""}</td>
                     <td className="p-2 border">{r.time}</td>
                     <td className="p-2 border">{r.guests}</td>
+                    <td className="p-2 border">
+                      <span className="px-2 py-1 rounded text-xs font-bold bg-green-200 text-green-800">
+                        {r.status}
+                      </span>
+                    </td>
                     <td className="p-2 border">{r.createdAt ? new Date(r.createdAt).toLocaleString() : ""}</td>
                   </tr>
                 ))}

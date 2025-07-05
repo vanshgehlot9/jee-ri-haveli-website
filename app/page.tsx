@@ -25,6 +25,7 @@ import Link from "next/link"
 import { useState } from "react"
 import RooftopRestaurant from "@/components/rooftop-restaurant"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
+import { useBookingModal } from "@/components/layout-wrapper"
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -41,29 +42,18 @@ const staggerContainer = {
 }
 
 export default function HomePage() {
+  const { setOpenBookingModal } = useBookingModal()
   const [activeRoom, setActiveRoom] = useState(0)
-  const [form, setForm] = useState({
-    checkIn: "",
-    checkOut: "",
-    roomType: "",
-    adults: 2,
-    children: 0,
-    name: "",
-    email: "",
-    phone: ""
-  })
-  const [bookingStatus, setBookingStatus] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
   // Widget state for availability check
   const [widget, setWidget] = useState({
     checkIn: "",
     checkOut: "",
-    roomType: "",
+    roomType: "Deluxe Room ",
   })
   const [availability, setAvailability] = useState<string | null>(null)
   const [canBook, setCanBook] = useState(false)
-  const [showModal, setShowModal] = useState(false)
 
   // Room details modal state
   const [showRoomModal, setShowRoomModal] = useState(false)
@@ -106,20 +96,43 @@ export default function HomePage() {
     { icon: Mountain, name: "Fort Views", desc: "Mehrangarh Fort panoramic views" },
   ]
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
-  }
-
   const handleWidgetChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setWidget((prev) => ({ ...prev, [name]: value }))
     setAvailability(null)
     setCanBook(false)
+    
+    // If check-in date changes and check-out is before it, clear check-out
+    if (name === 'checkIn' && widget.checkOut && value > widget.checkOut) {
+      setWidget(prev => ({ ...prev, checkOut: '' }))
+    }
   }
 
   const checkAvailability = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log("Checking availability with:", widget)
+    
+    // Validate dates
+    if (!widget.checkIn || !widget.checkOut) {
+      setAvailability("Please select check-in and check-out dates.")
+      return
+    }
+    
+    const checkInDate = new Date(widget.checkIn)
+    const checkOutDate = new Date(widget.checkOut)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    if (checkInDate < today) {
+      setAvailability("Check-in date cannot be in the past.")
+      return
+    }
+    
+    if (checkOutDate <= checkInDate) {
+      setAvailability("Check-out date must be after check-in date.")
+      return
+    }
+    
     setAvailability(null)
     setCanBook(false)
     setLoading(true)
@@ -130,6 +143,7 @@ export default function HomePage() {
         body: JSON.stringify({ ...widget, checkOnly: true })
       })
       const data = await res.json()
+      console.log("Availability response:", data)
       if (data.available) {
         setAvailability("Available!")
         setCanBook(true)
@@ -137,59 +151,17 @@ export default function HomePage() {
         setAvailability(data.error || "Not available.")
         setCanBook(false)
       }
-    } catch {
+    } catch (error) {
+      console.error("Availability check error:", error)
       setAvailability("Error checking availability.")
       setCanBook(false)
     }
     setLoading(false)
   }
 
-  const handleBooking = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setBookingStatus(null)
-    try {
-      const res = await fetch("/api/book", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
-      })
-      const data = await res.json()
-      if (data.success) {
-        setBookingStatus("Booking successful! Check your email for confirmation.")
-        setForm({
-          checkIn: "",
-          checkOut: "",
-          roomType: rooms[0].name,
-          adults: 2,
-          children: 0,
-          name: "",
-          email: "",
-          phone: ""
-        })
-      } else {
-        setBookingStatus(data.error || "Booking failed.")
-      }
-    } catch {
-      setBookingStatus("Booking failed. Please try again later.")
-    }
-    setLoading(false)
-  }
-
   // Open modal from header button
   const openBookingModal = () => {
-    setForm({
-      checkIn: widget.checkIn || "",
-      checkOut: widget.checkOut || "",
-      roomType: widget.roomType || rooms[0].name,
-      adults: 2,
-      children: 0,
-      name: "",
-      email: "",
-      phone: ""
-    })
-    setBookingStatus(null)
-    setShowModal(true)
+    setOpenBookingModal(true)
   }
 
   const openRoomModal = (room: any) => {
@@ -198,18 +170,7 @@ export default function HomePage() {
     setShowRoomModal(true)
   }
   const handleBookFromRoom = () => {
-    setForm({
-      checkIn: widget.checkIn || "",
-      checkOut: widget.checkOut || "",
-      roomType: roomDetail?.name || rooms[0].name,
-      adults: 2,
-      children: 0,
-      name: "",
-      email: "",
-      phone: ""
-    })
-    setBookingStatus(null)
-    setShowModal(true)
+    setOpenBookingModal(true)
     setShowRoomModal(false)
   }
 
@@ -224,64 +185,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
-      {/* Header */}
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-amber-200"
-      >
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                  Jee Ri Haveli
-                </h1>
-              </div>
-            </motion.div>
-
-            <nav className="hidden md:flex items-center space-x-8">
-              {[
-                { label: "Home", href: "#home" },
-                { label: "Restaurant", href: "#restaurant" },
-                { label: "Experience", href: "/experience" },
-                { label: "Celebrities", href: "/celebrities" },
-                { label: "Booking", href: "#rooms" },
-                { label: "Location", href: "/location" },
-                { label: "Contact", href: "#contact" },
-              ].map((item, index) => (
-                item.href.startsWith("/") ? (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-300 text-sm"
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-300 text-sm"
-                  >
-                    {item.label}
-                  </a>
-                )
-              ))}
-            </nav>
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-6 py-2 rounded-full shadow-lg" onClick={openBookingModal}>
-                Book Now
-              </Button>
-            </motion.div>
-          </div>
-        </div>
-      </motion.header>
 
       {/* Hero Section */}
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -330,7 +233,7 @@ export default function HomePage() {
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 yez-20 hidden lg:block"
+          className="absolute right-8 top-1/2 transform -translate-y-1/2 z-20 block"
         >
           <Card className="w-72 h-auto bg-white/70 backdrop-blur-md shadow-2xl border-0">
             <CardContent className="p-4">
@@ -338,28 +241,52 @@ export default function HomePage() {
               <form className="space-y-2" onSubmit={checkAvailability}>
                 <div>
                   <label className="text-xs font-medium text-gray-600">Check In</label>
-                  <input type="date" name="checkIn" value={widget.checkIn} onChange={handleWidgetChange} required className="w-full p-1 border rounded text-xs" />
+                  <input 
+                    type="date" 
+                    name="checkIn" 
+                    value={widget.checkIn} 
+                    onChange={handleWidgetChange} 
+                    min={new Date().toISOString().split('T')[0]}
+                    required 
+                    className="w-full p-1 border rounded text-xs" 
+                  />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-gray-600">Check Out</label>
-                  <input type="date" name="checkOut" value={widget.checkOut} onChange={handleWidgetChange} required className="w-full p-1 border rounded text-xs" />
+                  <input 
+                    type="date" 
+                    name="checkOut" 
+                    value={widget.checkOut} 
+                    onChange={handleWidgetChange} 
+                    min={widget.checkIn || new Date().toISOString().split('T')[0]}
+                    required 
+                    className="w-full p-1 border rounded text-xs" 
+                  />
                 </div>
-                <div>
-                  <label className="text-xs font-medium text-gray-600">Room Type</label>
-                  <select name="roomType" value={widget.roomType} onChange={handleWidgetChange} className="w-full p-1 border rounded text-xs">
-                    {rooms.map((room) => (
-                      <option key={room.name} value={room.name}>{room.name}</option>
-                    ))}
-                  </select>
-                </div>
+                                  <div>
+                    <label className="text-xs font-medium text-gray-600">Room Type</label>
+                    <select name="roomType" value={widget.roomType} onChange={handleWidgetChange} className="w-full p-1 border rounded text-xs">
+                      {rooms.map((room) => (
+                        <option key={room.name} value={room.name}>{room.name}</option>
+                      ))}
+                    </select>
+                  </div>
                 <Button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold" disabled={loading}>
                   {loading ? "Checking..." : "Check Availability"}
                 </Button>
-                {availability && (
-                  <div className="text-center text-xs mt-1 text-amber-700 font-semibold">{availability}</div>
+                {loading && (
+                  <div className="text-center text-xs mt-1 text-blue-600">Checking availability...</div>
+                )}
+                {availability && !loading && (
+                  <div className={`text-center text-xs mt-1 font-semibold ${
+                    availability.includes("Available") ? "text-green-600" : 
+                    availability.includes("Error") ? "text-red-600" : "text-amber-700"
+                  }`}>
+                    {availability}
+                  </div>
                 )}
                 {canBook && (
-                  <Button type="button" className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg text-xs font-bold" onClick={() => setShowModal(true)}>
+                  <Button type="button" className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs font-bold" onClick={() => setOpenBookingModal(true)}>
                     Book Now
                   </Button>
                 )}
@@ -661,60 +588,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Booking Modal */}
-      <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Book Your Stay</DialogTitle>
-          </DialogHeader>
-          <form className="space-y-2" onSubmit={handleBooking}>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Check In</label>
-              <input type="date" name="checkIn" value={form.checkIn} onChange={handleFormChange} required className="w-full p-1 border rounded text-xs" />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Check Out</label>
-              <input type="date" name="checkOut" value={form.checkOut} onChange={handleFormChange} required className="w-full p-1 border rounded text-xs" />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Room Type</label>
-              <select name="roomType" value={form.roomType} onChange={handleFormChange} className="w-full p-1 border rounded text-xs">
-                {rooms.map((room) => (
-                  <option key={room.name} value={room.name}>{room.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex gap-2">
-              <div className="flex-1">
-                <label className="text-xs font-medium text-gray-600">Adults</label>
-                <input type="number" name="adults" min={1} value={form.adults} onChange={handleFormChange} className="w-full p-1 border rounded text-xs" />
-              </div>
-              <div className="flex-1">
-                <label className="text-xs font-medium text-gray-600">Children</label>
-                <input type="number" name="children" min={0} value={form.children} onChange={handleFormChange} className="w-full p-1 border rounded text-xs" />
-              </div>
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Name</label>
-              <input type="text" name="name" value={form.name} onChange={handleFormChange} required className="w-full p-1 border rounded text-xs" />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Email</label>
-              <input type="email" name="email" value={form.email} onChange={handleFormChange} required className="w-full p-1 border rounded text-xs" />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Phone</label>
-              <input type="tel" name="phone" value={form.phone} onChange={handleFormChange} required className="w-full p-1 border rounded text-xs" />
-            </div>
-            <Button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold" disabled={loading}>
-              {loading ? "Booking..." : "Book Now"}
-            </Button>
-            {bookingStatus && (
-              <div className="text-center text-xs mt-1 text-amber-700 font-semibold">{bookingStatus}</div>
-            )}
-          </form>
-        </DialogContent>
-      </Dialog>
+
 
       {/* Room Details Modal */}
       <Dialog open={showRoomModal} onOpenChange={setShowRoomModal}>
