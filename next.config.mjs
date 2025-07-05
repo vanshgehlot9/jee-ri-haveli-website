@@ -9,6 +9,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Reduce bundle size
+  swcMinify: true,
 }
 
 export default nextConfig
