@@ -9,8 +9,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Static export for cPanel
-  output: 'export',
+  // Remove static export for Vercel deployment
+  // output: 'export',
   trailingSlash: true,
   // Reduce bundle size
   swcMinify: true,
