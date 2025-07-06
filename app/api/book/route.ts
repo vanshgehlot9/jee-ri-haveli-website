@@ -66,6 +66,23 @@ export async function POST(req: NextRequest) {
 
     const docRef = await addDoc(collection(db, 'bookings'), bookingData)
 
+    // Send email notifications
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/notify-booking`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...bookingData,
+          checkIn: checkIn,
+          checkOut: checkOut,
+          bookingId: bookingData.bookingId
+        })
+      })
+    } catch (emailError) {
+      console.error('Failed to send email notification:', emailError)
+      // Don't fail the booking if email fails
+    }
+
     return NextResponse.json({
       success: true,
       bookingId: bookingData.bookingId,

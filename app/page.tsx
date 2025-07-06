@@ -25,7 +25,7 @@ import Link from "next/link"
 import { useState } from "react"
 import RooftopRestaurant from "@/components/rooftop-restaurant"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
-import { useBookingModal } from "@/components/layout-wrapper"
+
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -42,7 +42,6 @@ const staggerContainer = {
 }
 
 export default function HomePage() {
-  const { setOpenBookingModal } = useBookingModal()
   const [activeRoom, setActiveRoom] = useState(0)
   const [loading, setLoading] = useState(false)
 
@@ -62,20 +61,21 @@ export default function HomePage() {
 
   const rooms = [
     {
-      name: "Deluxe Room ",
-      price: "₹",
+      name: "Deluxe Room",
+      price: "₹2,500",
       images: [
         "/images/deluxe.jpg",
-        "/images/deluxe1.jpg",
-        "/images/deluxe2.jpg",
-        "/images/deluxe3.jpg",
+        "/images/DELUXE ROOM/DSC_0933.jpg",
+        "/images/DELUXE ROOM/DSC_0939.jpg",
+        "/images/DELUXE ROOM/DSC_0952.jpg",
+        "/images/DELUXE ROOM/DSC_0935.jpg",
       ],
       description: "Our Deluxe Room offers a blend of traditional Rajasthani decor and modern comfort, featuring a king-size bed, private balcony, and a stunning city view. Perfect for couples or solo travelers seeking luxury and relaxation.",
       features: ["King Bed", "City View", "Balcony" , "Sitting Area" , "Tea Service"],
     },
     {
       name: "Standard Room",
-      price: "₹",
+      price: "₹1,800",
       images: [
         "/images/standard.jpg",
         "/images/standard1.jpg",
@@ -84,6 +84,18 @@ export default function HomePage() {
       ],
       description: "Our Standard Room is designed for comfort and convenience, offering a cozy sitting area, balcony, and beautiful city views. Ideal for business travelers or families on a budget.",
       features: ["City View" , "Balcony" , "Sitting Area"],
+    },
+    {
+      name: "Standard Room without Balcony",
+      price: "₹1,500",
+      images: [
+        "/images/STANDARD ROOM WITHOUT BALCONY/ASM_7787.jpg",
+        "/images/STANDARD ROOM WITHOUT BALCONY/ASM_7789.jpg",
+        "/images/STANDARD ROOM WITHOUT BALCONY/DSC_0986.jpg",
+        "/images/STANDARD ROOM WITHOUT BALCONY/DSC_0997.jpg",
+      ],
+      description: "Our Standard Room without Balcony offers comfortable accommodation with all essential amenities, perfect for budget-conscious travelers.",
+      features: ["City View" , "Sitting Area"],
     },
   ]
 
@@ -159,10 +171,7 @@ export default function HomePage() {
     setLoading(false)
   }
 
-  // Open modal from header button
-  const openBookingModal = () => {
-    setOpenBookingModal(true)
-  }
+
 
   const openRoomModal = (room: any) => {
     setRoomDetail(room)
@@ -170,8 +179,9 @@ export default function HomePage() {
     setShowRoomModal(true)
   }
   const handleBookFromRoom = () => {
-    setOpenBookingModal(true)
     setShowRoomModal(false)
+    // Redirect to booking page
+    window.location.href = '/book'
   }
 
   const handleCarouselPrev = () => {
@@ -286,10 +296,19 @@ export default function HomePage() {
                   </div>
                 )}
                 {canBook && (
-                  <Button type="button" className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs font-bold" onClick={() => setOpenBookingModal(true)}>
-                    Book Now
-                  </Button>
+                  <Link href="/book">
+                    <Button type="button" className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs font-bold">
+                      Book Now
+                    </Button>
+                  </Link>
                 )}
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <Link href="/book">
+                    <Button type="button" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold">
+                      Full Booking Experience
+                    </Button>
+                  </Link>
+                </div>
               </form>
             </CardContent>
           </Card>
@@ -430,6 +449,21 @@ export default function HomePage() {
                 </motion.div>
               ))}
             </div>
+            
+            {/* Booking CTA */}
+            <motion.div variants={fadeInUp} className="text-center mt-12">
+              <div className="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-8 text-white">
+                <h3 className="text-2xl font-bold mb-4">Ready to Experience Royal Luxury?</h3>
+                <p className="text-lg mb-6 opacity-90">Book your stay at Jee Ri Haveli and create unforgettable memories</p>
+                <div className="flex justify-center">
+                  <Link href="/book">
+                    <Button className="bg-white text-amber-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold">
+                      Book Your Stay
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -501,7 +535,16 @@ export default function HomePage() {
             </motion.div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+              {[
+                "/images/capture the moment/DSC_0975.jpg",
+                "/images/capture the moment/ASM_7876.jpg",
+                "/images/capture the moment/ASM_7870.jpg",
+                "/images/capture the moment/ASM_7852.jpg",
+                "/images/capture the moment/ASM_7767.jpg",
+                "/images/capture the moment/ASM_7775.jpg",
+                "/images/capture the moment/ASM_7765.jpg",
+                "/images/capture the moment/ASM_7766.jpg"
+              ].map((image, index) => (
                 <motion.div
                   key={index}
                   variants={fadeInUp}
@@ -509,8 +552,8 @@ export default function HomePage() {
                   className="relative overflow-hidden rounded-xl shadow-lg cursor-pointer group"
                 >
                   <Image
-                    src={`/images/gallery${item}.jpg?height=300&width=300`}
-                    alt={`Gallery ${item}`}
+                    src={image}
+                    alt={`Gallery ${index + 1}`}
                     width={300}
                     height={300}
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
