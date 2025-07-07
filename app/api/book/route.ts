@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 
     // Send email notifications
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://jeerihaveli.vercel.app/';
       await fetch(`${baseUrl}/api/notify-booking`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
