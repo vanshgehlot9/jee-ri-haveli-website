@@ -15,6 +15,22 @@ const fadeInUp = {
   transition: { duration: 0.6 },
 }
 
+const restaurantImages = [
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.46 (2).jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.45 (1).jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.44 (1).jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.43 (3).jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.43 (2).jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.43 (1).jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.43.jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.42.jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.41.jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.40 (2).jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.40 (1).jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.40.jpeg",
+  "/images/restaurant/WhatsApp Image 2025-07-05 at 21.38.39.jpeg",
+];
+
 export default function RooftopRestaurant() {
   const [showReserve, setShowReserve] = useState(false)
   const [reserveForm, setReserveForm] = useState({
@@ -27,6 +43,7 @@ export default function RooftopRestaurant() {
   })
   const [reserveStatus, setReserveStatus] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [showGallery, setShowGallery] = useState(false)
 
   const handleReserveChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -87,6 +104,13 @@ export default function RooftopRestaurant() {
                   <h3 className="text-2xl font-bold mb-2">Rooftop Restaurant</h3>
                   <p className="text-sm opacity-90">Mehrangarh Fort View</p>
                 </div>
+                <Button
+                  className="absolute top-4 right-4 bg-white/80 text-purple-700 hover:bg-white"
+                  variant="secondary"
+                  onClick={() => setShowGallery(true)}
+                >
+                  See Restaurant Photos
+                </Button>
               </div>
             </motion.div>
 
@@ -215,6 +239,28 @@ export default function RooftopRestaurant() {
               <div className="text-center text-xs mt-1 text-purple-700 font-semibold">{reserveStatus}</div>
             )}
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Restaurant Photo Gallery Dialog */}
+      <Dialog open={showGallery} onOpenChange={setShowGallery}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Restaurant Photo Gallery</DialogTitle>
+          </DialogHeader>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {restaurantImages.map((src, idx) => (
+              <div key={src} className="overflow-hidden rounded-lg shadow">
+                <Image
+                  src={src}
+                  alt={`Restaurant photo ${idx + 1}`}
+                  width={400}
+                  height={300}
+                  className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ))}
+          </div>
         </DialogContent>
       </Dialog>
     </section>

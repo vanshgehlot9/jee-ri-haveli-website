@@ -5,18 +5,16 @@ import nodemailer from "nodemailer"
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER || "your-email@gmail.com", // Your Gmail address
-    pass: process.env.EMAIL_PASS || "your-app-password"  // Your Gmail app password
+    user: process.env.GMAIL_USER, // Your Gmail address
+    pass: process.env.GMAIL_PASS  // Your Gmail app password
   }
 })
 
 export async function POST(req: NextRequest) {
   try {
     // Check if email credentials are configured
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || 
-        process.env.EMAIL_USER === "your-email@gmail.com" || 
-        process.env.EMAIL_PASS === "your-app-password") {
-      console.log('Email credentials not configured, skipping email notification')
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
+      console.log('Gmail credentials not configured, skipping email notification')
       return NextResponse.json({ 
         success: true, 
         message: 'Email notification skipped - credentials not configured' 
@@ -28,8 +26,8 @@ export async function POST(req: NextRequest) {
 
     // Email to admin
     const adminMailOptions = {
-      from: process.env.EMAIL_USER,
-      to: "info@jeerihaveli.com", // Replace with your email
+      from: process.env.GMAIL_USER,
+      to: process.env.GMAIL_TO, // Admin email from env
       subject: `🎉 New Booking Received - ${bookingId}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
@@ -97,7 +95,7 @@ export async function POST(req: NextRequest) {
 
     // Email to guest
     const guestMailOptions = {
-      from: process.env.EMAIL_USER,
+      from: process.env.GMAIL_USER,
       to: email,
       subject: `✅ Booking Confirmed - ${bookingId}`,
       html: `

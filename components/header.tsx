@@ -33,13 +33,13 @@ export default function Header({ onBookNowClick }: HeaderProps) {
           <nav className="hidden md:flex items-center space-x-8">
             {[
               { label: "Home", href: "/" },
-              { label: "Restaurant", href: "/#restaurant" },
+              { label: "Restaurant", href: "/restaurant" },
               { label: "Places to Visit", href: "/places-to-visit" },
               { label: "Experience", href: "/experience" },
               { label: "Celebrities", href: "/celebrities" },
               { label: "Book Now", href: "/book" },
               { label: "Location", href: "/location" },
-              { label: "Contact", href: "/#contact" },
+              { label: "Contact", href: "/contact" },
             ].map((item) => (
               item.href.startsWith("/#") ? (
                 <a
