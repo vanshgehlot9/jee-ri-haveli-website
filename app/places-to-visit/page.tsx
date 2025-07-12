@@ -197,8 +197,28 @@ export default function PlacesToVisitPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20">
-      <div className="container mx-auto px-4 max-w-5xl">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
+      {/* Hero Section */}
+      <section className="relative w-full h-[60vh] min-h-[350px] flex items-center justify-center overflow-hidden mb-10">
+        <Image
+          src="/images/WhatsApp Image 2025-07-11 at 14.29.59.jpeg"
+          alt="Mehrangarh Fort, Jodhpur"
+          fill
+          className="object-cover object-center"
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10" />
+        <div className="relative z-20 text-center text-white px-4 w-full flex flex-col items-center justify-center">
+          <span className="text-lg md:text-xl font-semibold text-amber-200 mb-2 drop-shadow">Explore Jodhpur</span>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-2 drop-shadow-lg">Places to Visit in Jodhpur</h1>
+          <p className="max-w-2xl text-base md:text-lg text-white/90 drop-shadow mb-2">
+            Discover the rich history, vibrant culture, and breathtaking sights of Jodhpur. From majestic forts to tranquil lakes, each destination offers a unique glimpse into the heart of Rajasthan.
+          </p>
+        </div>
+      </section>
+      {/* Main Content */}
+      <div className="max-w-3xl mx-auto px-4 pb-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -209,9 +229,6 @@ export default function PlacesToVisitPage() {
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
             Places to Visit in Jodhpur
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Discover the rich history, vibrant culture, and breathtaking sights of Jodhpur. From majestic forts to tranquil lakes, each destination offers a unique glimpse into the heart of Rajasthan.
-          </p>
         </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {places.map((place, idx) => (
@@ -221,7 +238,7 @@ export default function PlacesToVisitPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              className="bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-orange-100"
               onClick={() => handlePlaceClick(place)}
             >
               <div className="w-full h-72 relative bg-gray-100 flex items-center justify-center">
@@ -237,8 +254,17 @@ export default function PlacesToVisitPage() {
               <div className="p-6">
                 <h2 className="text-2xl font-bold mb-2 text-amber-700">{place.name}</h2>
                 <p className="text-gray-700 text-lg mb-4">{place.description}</p>
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-gray-500 gap-2">
                   <span className="bg-amber-100 px-2 py-1 rounded-full">{place.distance}</span>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + ' Jodhpur')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-2 px-3 py-1 bg-amber-600 text-white rounded-full text-xs font-semibold shadow hover:bg-amber-700 transition-colors"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    Get Directions
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -311,15 +337,26 @@ export default function PlacesToVisitPage() {
                 
                 {/* Quick Info */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
-                  <div className="text-center p-4 bg-amber-50 rounded-lg">
+                  <div className="text-center p-4 bg-amber-50 rounded-lg flex flex-col items-center justify-center">
                     <h4 className="font-semibold text-amber-700 mb-1">Distance</h4>
-                    <p className="text-gray-600">{selectedPlace.distance}</p>
+                    <div className="flex items-center gap-2 justify-center">
+                      <p className="text-gray-600">{selectedPlace.distance}</p>
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedPlace.name + ' Jodhpur')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1 bg-amber-600 text-white rounded-full text-xs font-semibold shadow hover:bg-amber-700 transition-colors"
+                        onClick={e => e.stopPropagation()}
+                      >
+                        Get Directions
+                      </a>
+                    </div>
                   </div>
-                  <div className="text-center p-4 bg-amber-50 rounded-lg">
+                  <div className="text-center p-4 bg-amber-50 rounded-lg flex flex-col items-center justify-center">
                     <h4 className="font-semibold text-amber-700 mb-1">Best Time</h4>
                     <p className="text-gray-600">{selectedPlace.bestTime}</p>
                   </div>
-                  <div className="text-center p-4 bg-amber-50 rounded-lg">
+                  <div className="text-center p-4 bg-amber-50 rounded-lg flex flex-col items-center justify-center">
                     <h4 className="font-semibold text-amber-700 mb-1">Entry Fee</h4>
                     <p className="text-gray-600">{selectedPlace.entryFee}</p>
                   </div>

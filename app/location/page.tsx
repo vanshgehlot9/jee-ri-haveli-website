@@ -1,35 +1,51 @@
-"use client"
+"use client";
 
-const hotelAddress = "Jee Ri Haveli, Near Rajmahal Sr. Hr. Sec. School, Gulab Sagar, Jodhpur, Rajasthan, India"
-const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hotelAddress)}`
+import React from "react";
 
 export default function LocationPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Our Location</h1>
-        <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3520.073073964479!2d73.0185!3d26.2996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39418c6e2e2e2e2e%3A0x1234567890abcdef!2sJee%20Ri%20Haveli!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
-            width="100%"
-            height="400"
-            style={{ border: 0 }}
-            allowFullScreen={true}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-        <div className="flex justify-center">
-          <a
-            href={googleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:from-amber-700 hover:to-orange-700 transition-colors"
-          >
-            Get Directions
-          </a>
-        </div>
+    <div className="max-w-3xl mx-auto py-12 px-4">
+      <h1 className="text-3xl font-bold text-center text-purple-700 mb-8">Location</h1>
+      {/* Google Map */}
+      <div className="w-full h-72 md:h-96 rounded-xl overflow-hidden shadow mb-8">
+        <iframe
+          src="https://www.google.com/maps?q=Jee+Ri+Haveli,+Gulab+Sagar,+Jodhpur,+Rajasthan,+India&output=embed"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          allowFullScreen={true}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          title="Jee Ri Haveli Location"
+        ></iframe>
+      </div>
+      {/* Address & Distances */}
+      <div className="bg-white/90 rounded-xl shadow p-6 mb-8">
+        <h2 className="text-xl font-semibold text-amber-700 mb-2">Jee Ri Haveli</h2>
+        <p className="mb-2">Near Rajmahal Sr. Hr. Sec. School,<br />Gulab Sagar,<br />Jodhpur (Rajasthan) India</p>
+        <p className="mb-2">Ph. <a href="tel:+912912540007" className="text-blue-700 hover:underline">+91-291-2540007</a></p>
+        <p className="mb-2">Mobile: <a href="tel:+919351722007" className="text-blue-700 hover:underline">+91-93517-22007</a>, <a href="tel:+919351733007" className="text-blue-700 hover:underline">+91-93517-33007</a>, <a href="tel:+916375144341" className="text-blue-700 hover:underline">+91-6375144341</a></p>
+        <p className="mb-2">Email: <a href="mailto:info@jeerihaveli.com" className="text-blue-700 hover:underline">info@jeerihaveli.com</a></p>
+        <p className="mb-2">Website: <a href="http://www.jeerihaveli.com" className="text-blue-700 hover:underline">www.jeerihaveli.com</a></p>
+      </div>
+      {/* Distances */}
+      <div className="bg-white/90 rounded-xl shadow p-6">
+        <h3 className="text-lg font-semibold text-amber-700 mb-4">Distance from Jee Ri Haveli</h3>
+        <ul className="list-disc pl-6 space-y-1 text-gray-700">
+          <li>Railway Station: 1.5 Km</li>
+          <li>Airport: 4 Km</li>
+          <li>Bus Stand: 2 Km</li>
+          <li>Umaid Bhawan Palace: 3 Km</li>
+          <li>Jaswant Thada: 15 Minutes Walking Distance</li>
+          <li>Mehrangarh Fort: 10 Minutes Walking Distance</li>
+          <li>Sardar Bazaar & Clock Tower: 2 Minutes walking distance</li>
+          <li>Lake Gulab Sagar: In Front of Haveli</li>
+          <li>Bank of Baroda: 0.5 Km</li>
+          <li>State Bank of India: 1 Km</li>
+          <li>Tourist Reception Centre: 1 Km</li>
+        </ul>
+        <p className="mt-4 text-gray-600 text-sm">Jee Ri Haveli is centrally located in the quiet residential area with all major attractions including Mehran Garh Fort, Ummaid Palace, Jaswant Thada etc and just few steps away from Clock Tower, Sardar Market (Bazaar) centre of the Jodhpur City.</p>
       </div>
     </div>
-  )
+  );
 } 

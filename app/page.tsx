@@ -197,27 +197,26 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
 
       {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30 z-10" />
+      <section
+        id="home"
+        className="relative w-full aspect-[16/7] min-h-[400px] flex items-center justify-center overflow-hidden"
+      >
         <Image
-          src="/images/slider1.jpg"
+          src="/images/slider2.jpg"
           alt="Rooftop Restaurant at Jee Ri Haveli with Mehrangarh Fort view"
           fill
-          className="object-cover"
+          className="object-contain object-center transition-all duration-500 rounded-b-3xl shadow-xl"
           priority
+          sizes="100vw"
+          quality={95}
         />
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="relative z-20 text-center text-white px-4"
-        >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 rounded-b-3xl" />
+        <div className="relative z-20 text-center text-white px-4 w-full">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-amber-200 to-orange-200 bg-clip-text text-transparent"
+            className="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-amber-200 to-orange-200 bg-clip-text text-transparent drop-shadow-lg tracking-tight"
           >
             Welcome to Jee Ri Haveli
           </motion.h1>
@@ -225,95 +224,134 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed"
+            className="text-lg md:text-2xl mb-6 max-w-2xl mx-auto leading-relaxed drop-shadow font-medium"
           >
             Experience the royal palace on Gulab Sagar Lake with breathtaking views of Mehrangarh Fort
           </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-          </motion.div>
-        </motion.div>
-
-        {/* Booking Widget */}
-        <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 z-20 block"
-        >
-          <Card className="w-72 h-auto bg-white/70 backdrop-blur-md shadow-2xl border-0">
-            <CardContent className="p-4">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">Check Availability</h3>
-              <form className="space-y-2" onSubmit={checkAvailability}>
-                <div>
-                  <label className="text-xs font-medium text-gray-600">Check In</label>
-                  <input 
-                    type="date" 
-                    name="checkIn" 
-                    value={widget.checkIn} 
-                    onChange={handleWidgetChange} 
-                    min={new Date().toISOString().split('T')[0]}
-                    required 
-                    className="w-full p-1 border rounded text-xs" 
-                  />
+        </div>
+        {/* Booking Widget (desktop) */}
+        <div className="absolute right-8 bottom-8 z-30 max-w-sm w-full hidden md:block">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-5 border border-amber-100 min-w-[300px] max-w-[340px]">
+            <h3 className="text-base font-bold text-gray-800 mb-2">Check Availability</h3>
+            <form className="space-y-2" onSubmit={checkAvailability}>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Check In</label>
+                <input 
+                  type="date" 
+                  name="checkIn" 
+                  value={widget.checkIn} 
+                  onChange={handleWidgetChange} 
+                  min={new Date().toISOString().split('T')[0]}
+                  required 
+                  className="w-full p-1 border rounded text-xs" 
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Check Out</label>
+                <input 
+                  type="date" 
+                  name="checkOut" 
+                  value={widget.checkOut} 
+                  onChange={handleWidgetChange} 
+                  min={widget.checkIn || new Date().toISOString().split('T')[0]}
+                  required 
+                  className="w-full p-1 border rounded text-xs" 
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Room Type</label>
+                <select name="roomType" value={widget.roomType} onChange={handleWidgetChange} className="w-full p-1 border rounded text-xs">
+                  {rooms.map((room) => (
+                    <option key={room.name} value={room.name}>{room.name}</option>
+                  ))}
+                </select>
+              </div>
+              <Button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold" disabled={loading}>
+                {loading ? "Checking..." : "Check Availability"}
+              </Button>
+              {loading && (
+                <div className="text-center text-xs mt-1 text-blue-600">Checking availability...</div>
+              )}
+              {availability && !loading && (
+                <div className={`text-center text-xs mt-1 font-semibold ${
+                  availability.includes("Available") ? "text-green-600" : 
+                  availability.includes("Error") ? "text-red-600" : "text-amber-700"
+                }`}>
+                  {availability}
                 </div>
-                <div>
-                  <label className="text-xs font-medium text-gray-600">Check Out</label>
-                  <input 
-                    type="date" 
-                    name="checkOut" 
-                    value={widget.checkOut} 
-                    onChange={handleWidgetChange} 
-                    min={widget.checkIn || new Date().toISOString().split('T')[0]}
-                    required 
-                    className="w-full p-1 border rounded text-xs" 
-                  />
-                </div>
-                                  <div>
-                    <label className="text-xs font-medium text-gray-600">Room Type</label>
-                    <select name="roomType" value={widget.roomType} onChange={handleWidgetChange} className="w-full p-1 border rounded text-xs">
-                      {rooms.map((room) => (
-                        <option key={room.name} value={room.name}>{room.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                <Button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold" disabled={loading}>
-                  {loading ? "Checking..." : "Check Availability"}
-                </Button>
-                {loading && (
-                  <div className="text-center text-xs mt-1 text-blue-600">Checking availability...</div>
-                )}
-                {availability && !loading && (
-                  <div className={`text-center text-xs mt-1 font-semibold ${
-                    availability.includes("Available") ? "text-green-600" : 
-                    availability.includes("Error") ? "text-red-600" : "text-amber-700"
-                  }`}>
-                    {availability}
-                  </div>
-                )}
-                {canBook && (
-                  <Link href="/book">
-                    <Button type="button" className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs font-bold">
-                      Book Now
-                    </Button>
-                  </Link>
-                )}
-                <div className="mt-3 pt-3 border-t border-gray-200">
-                  <Link href="/book">
-                    <Button type="button" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold">
-                      Full Booking Experience
-                    </Button>
-                  </Link>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </motion.div>
+              )}
+              {canBook && (
+                <Link href="/book">
+                  <Button type="button" className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs font-bold">
+                    Book Now
+                  </Button>
+                </Link>
+              )}
+            </form>
+          </div>
+        </div>
       </section>
+      {/* Mobile Booking Widget */}
+      <div className="block md:hidden px-4 mt-4">
+        <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-5 border border-amber-100 min-w-[300px] max-w-[340px] mx-auto">
+          <h3 className="text-base font-bold text-gray-800 mb-2">Check Availability</h3>
+          <form className="space-y-2" onSubmit={checkAvailability}>
+            <div>
+              <label className="text-xs font-medium text-gray-600">Check In</label>
+              <input 
+                type="date" 
+                name="checkIn" 
+                value={widget.checkIn} 
+                onChange={handleWidgetChange} 
+                min={new Date().toISOString().split('T')[0]}
+                required 
+                className="w-full p-1 border rounded text-xs" 
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-600">Check Out</label>
+              <input 
+                type="date" 
+                name="checkOut" 
+                value={widget.checkOut} 
+                onChange={handleWidgetChange} 
+                min={widget.checkIn || new Date().toISOString().split('T')[0]}
+                required 
+                className="w-full p-1 border rounded text-xs" 
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-600">Room Type</label>
+              <select name="roomType" value={widget.roomType} onChange={handleWidgetChange} className="w-full p-1 border rounded text-xs">
+                {rooms.map((room) => (
+                  <option key={room.name} value={room.name}>{room.name}</option>
+                ))}
+              </select>
+            </div>
+            <Button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold" disabled={loading}>
+              {loading ? "Checking..." : "Check Availability"}
+            </Button>
+            {loading && (
+              <div className="text-center text-xs mt-1 text-blue-600">Checking availability...</div>
+            )}
+            {availability && !loading && (
+              <div className={`text-center text-xs mt-1 font-semibold ${
+                availability.includes("Available") ? "text-green-600" : 
+                availability.includes("Error") ? "text-red-600" : "text-amber-700"
+              }`}>
+                {availability}
+              </div>
+            )}
+            {canBook && (
+              <Link href="/book">
+                <Button type="button" className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs font-bold">
+                  Book Now
+                </Button>
+              </Link>
+            )}
+          </form>
+        </div>
+      </div>
 
       {/* About Section */}
       <section id="about" className="py-20 bg-white">
@@ -510,64 +548,6 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
-
-      {/* Gallery Section */}
-      <section id="gallery" className="py-20 bg-gradient-to-b from-amber-50 to-orange-50">
-        <div className="container mx-auto px-4">
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="max-w-6xl mx-auto"
-          >
-            <motion.div variants={fadeInUp} className="text-center mb-16">
-              <Badge className="mb-4 bg-orange-100 text-orange-800 px-4 py-2">Gallery</Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                Capture the{" "}
-                <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                  Moments
-                </span>
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                A visual journey through our heritage property and luxurious accommodations
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                "/images/capture the moment/DSC_0975.jpg",
-                "/images/capture the moment/ASM_7876.jpg",
-                "/images/capture the moment/ASM_7870.jpg",
-                "/images/capture the moment/ASM_7852.jpg",
-                "/images/capture the moment/ASM_7767.jpg",
-                "/images/capture the moment/ASM_7775.jpg",
-                "/images/capture the moment/ASM_7765.jpg",
-                "/images/capture the moment/ASM_7766.jpg"
-              ].map((image, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  whileHover={{ scale: 1.05 }}
-                  className="relative overflow-hidden rounded-xl shadow-lg cursor-pointer group"
-                >
-                  <Image
-                    src={image}
-                    alt={`Gallery ${index + 1}`}
-                    width={300}
-                    height={300}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-white" />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-white">
         <div className="container mx-auto px-4">
@@ -698,6 +678,264 @@ export default function HomePage() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Awards & Recognition Section */}
+      <section className="py-16 bg-gray-50">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="max-w-6xl mx-auto px-4"
+        >
+          <motion.div variants={fadeInUp} className="text-center mb-12">
+            <Badge className="mb-4 bg-amber-100 text-amber-800 px-4 py-2">Awards & Recognition</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+              Our{" "}
+              <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                Achievements
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Recognized for excellence in hospitality and heritage preservation
+            </p>
+          </motion.div>
+
+          <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/tp-2013.jpg"
+                alt="TripAdvisor Certificate of Excellence 2013"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">TripAdvisor Excellence 2013</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/tp-2012.jpg"
+                alt="TripAdvisor Certificate of Excellence 2012"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">TripAdvisor Excellence 2012</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/tp-2011.jpg"
+                alt="TripAdvisor Certificate of Excellence 2011"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">TripAdvisor Excellence 2011</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/2020-winner.jpg"
+                alt="Winner 2020"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Winner 2020</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/2019-winner.jpg"
+                alt="Winner 2019"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Winner 2019</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/2018-winner.jpg"
+                alt="Winner 2018"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Winner 2018</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/2017.jpg"
+                alt="Winner 2017"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Winner 2017</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/bravo.jpg"
+                alt="Bravo Award"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Bravo Award</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/widget.jpg"
+                alt="Widget Award"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Widget Award</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/winner-2020.jpg"
+                alt="Winner 2020 Large"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Winner 2020</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/winner-2019.jpg"
+                alt="Winner 2019 Large"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Winner 2019</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/winner-300x300.gif"
+                alt="Winner Badge"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Winner Badge</p>
+            </div>
+            
+            <div className="text-center p-4">
+              <Image
+                src="/images/badges/Booking.com-Award1.jpg"
+                alt="Booking.com Award"
+                width={120}
+                height={120}
+                className="mx-auto mb-3 rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+              <p className="text-sm font-medium text-gray-700">Booking.com Award</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Our Brands Section */}
+      <section className="py-20 bg-gradient-to-br from-white via-amber-50 to-orange-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-40" style={{background: 'radial-gradient(circle at 80% 20%, #ffe0b2 0%, transparent 70%)'}} />
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="max-w-6xl mx-auto"
+          >
+            <motion.div variants={fadeInUp} className="text-center mb-16">
+              <Badge className="mb-4 bg-amber-100 text-amber-800 px-4 py-2">Our Brands</Badge>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-6 tracking-tight">
+                Our <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Other Businesses</span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Explore our group brands offering travel, tours, and heritage experiences
+              </p>
+            </motion.div>
+            <motion.div variants={fadeInUp} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+              {/* Jee Tours */}
+              <motion.div whileHover={{ y: -8, scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
+                <Card className="flex flex-col items-center p-8 shadow-2xl border-0 bg-white/60 backdrop-blur-lg rounded-3xl transition-all duration-300 hover:shadow-amber-200/60 group">
+                  <div className="relative mb-4">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-200 to-orange-200 flex items-center justify-center ring-4 ring-amber-300/40 group-hover:ring-orange-400/60 transition-all duration-300">
+                      <MapPin className="w-10 h-10 text-amber-600" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-gray-800 mb-1 text-center tracking-tight">Jee Tours</h3>
+                  <p className="text-gray-500 text-center mb-4 text-sm">Travel & Tour Packages</p>
+                  <Link href="https://www.jeetours.com" target="_blank" rel="noopener noreferrer" className="w-full flex items-center gap-2 justify-center mt-auto">
+                    <Button className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold flex-1">View More</Button>
+                    <span className="inline-block"><svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5 text-amber-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M14 3h7m0 0v7m0-7L10 14m-7 7h7a2 2 0 002-2v-7' /></svg></span>
+                  </Link>
+                </Card>
+              </motion.div>
+              {/* Jee Tours & Travels */}
+              <motion.div whileHover={{ y: -8, scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
+                <Card className="flex flex-col items-center p-8 shadow-2xl border-0 bg-white/60 backdrop-blur-lg rounded-3xl transition-all duration-300 hover:shadow-amber-200/60 group">
+                  <div className="relative mb-4">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-200 to-orange-200 flex items-center justify-center ring-4 ring-amber-300/40 group-hover:ring-orange-400/60 transition-all duration-300">
+                      <Car className="w-10 h-10 text-amber-600" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-gray-800 mb-1 text-center tracking-tight">Jee Tours & Travels</h3>
+                  <p className="text-gray-500 text-center mb-4 text-sm">Comprehensive Travel Solutions</p>
+                  <Link href="https://www.jeetoursandtravels.com" target="_blank" rel="noopener noreferrer" className="w-full flex items-center gap-2 justify-center mt-auto">
+                    <Button className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold flex-1">View More</Button>
+                    <span className="inline-block"><svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5 text-amber-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M14 3h7m0 0v7m0-7L10 14m-7 7h7a2 2 0 002-2v-7' /></svg></span>
+                  </Link>
+                </Card>
+              </motion.div>
+              {/* Buddha Pilgrimage Tours */}
+              <motion.div whileHover={{ y: -8, scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
+                <Card className="flex flex-col items-center p-8 shadow-2xl border-0 bg-white/60 backdrop-blur-lg rounded-3xl transition-all duration-300 hover:shadow-amber-200/60 group">
+                  <div className="relative mb-4">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-200 to-orange-200 flex items-center justify-center ring-4 ring-amber-300/40 group-hover:ring-orange-400/60 transition-all duration-300">
+                      <Sparkles className="w-10 h-10 text-amber-600" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-gray-800 mb-1 text-center tracking-tight">Buddha Pilgrimage Tours</h3>
+                  <p className="text-gray-500 text-center mb-4 text-sm">Buddhist Pilgrimage Specialists</p>
+                  <Link href="https://www.buddhapilgriagetours.com" target="_blank" rel="noopener noreferrer" className="w-full flex items-center gap-2 justify-center mt-auto">
+                    <Button className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold flex-1">View More</Button>
+                    <span className="inline-block"><svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5 text-amber-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M14 3h7m0 0v7m0-7L10 14m-7 7h7a2 2 0 002-2v-7' /></svg></span>
+                  </Link>
+                </Card>
+              </motion.div>
+              {/* Ajanta & Ellora Caves */}
+              <motion.div whileHover={{ y: -8, scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
+                <Card className="flex flex-col items-center p-8 shadow-2xl border-0 bg-white/60 backdrop-blur-lg rounded-3xl transition-all duration-300 hover:shadow-amber-200/60 group">
+                  <div className="relative mb-4">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-200 to-orange-200 flex items-center justify-center ring-4 ring-amber-300/40 group-hover:ring-orange-400/60 transition-all duration-300">
+                      <Mountain className="w-10 h-10 text-amber-600" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-gray-800 mb-1 text-center tracking-tight">Ajanta & Ellora Caves</h3>
+                  <p className="text-gray-500 text-center mb-4 text-sm">Heritage & Culture Tours</p>
+                  <Link href="https://www.ajantaandelloracaves.com" target="_blank" rel="noopener noreferrer" className="w-full flex items-center gap-2 justify-center mt-auto">
+                    <Button className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold flex-1">View More</Button>
+                    <span className="inline-block"><svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5 text-amber-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M14 3h7m0 0v7m0-7L10 14m-7 7h7a2 2 0 002-2v-7' /></svg></span>
+                  </Link>
+                </Card>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">

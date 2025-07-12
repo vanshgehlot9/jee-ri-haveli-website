@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import Image from 'next/image';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -36,8 +37,9 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[60vh] bg-gradient-to-b from-amber-50 to-orange-50 py-12 px-4 pt-24">
-      <Card className="w-full max-w-lg shadow-xl border-amber-200">
+    <div className="flex flex-col md:flex-row justify-center items-center min-h-[60vh] bg-gradient-to-b from-amber-50 to-orange-50 py-12 px-4 pt-24 gap-8">
+      {/* Contact Form Card */}
+      <Card className="w-full max-w-lg shadow-xl border-amber-200 order-2 md:order-1">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-amber-700 text-center">Contact Us</CardTitle>
         </CardHeader>
@@ -113,6 +115,22 @@ export default function ContactPage() {
           </CardFooter>
         </form>
       </Card>
+      {/* Contact Info Card */}
+      <div className="w-full max-w-md bg-amber-100 text-amber-900 rounded-2xl shadow-xl p-8 mb-8 md:mb-0 md:ml-4 flex flex-col justify-between order-1 md:order-2">
+        <div>
+          <div className="text-2xl italic mb-2">Contact us</div>
+          <div className="text-3xl font-bold mb-2">Jee Ri Haveli</div>
+          <div className="mb-2">Near Rajmahal Sr. Hr. Sec. School,<br/>Gulab Sagar,<br/>Jodhpur (Rajasthan) India</div>
+          <div className="mb-2">Ph. <a href="tel:+912912540007" className="underline hover:text-orange-600">+91-291-2540007</a></div>
+          <div className="mb-2">(M) <a href="tel:+919351722007" className="underline hover:text-orange-600">+91-93517-22007</a>, <a href="tel:+919351733007" className="underline hover:text-orange-600">+91 9351733007</a></div>
+          <div className="mb-2">(M) <a href="tel:+916375144341" className="underline hover:text-orange-600">+91-6375144341</a></div>
+          <div className="mb-2">Email: <a href="mailto:info@jeerihaveli.com" className="underline hover:text-orange-600">info@jeerihaveli.com</a></div>
+          <div className="mb-4">Website: <a href="http://www.jeerihaveli.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-orange-600">http://www.jeerihaveli.com</a></div>
+        </div>
+        <div className="flex items-center justify-center mt-4">
+          <Image src="/images/credit-card-logos.png" alt="Payment Methods" width={220} height={40} className="object-contain" />
+        </div>
+      </div>
     </div>
   );
 } 

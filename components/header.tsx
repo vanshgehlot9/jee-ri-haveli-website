@@ -15,68 +15,68 @@ export default function Header({ onBookNowClick }: HeaderProps) {
   const [showGallery, setShowGallery] = useState(false);
   return (
     <>
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-amber-200"
-      >
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                  Jee Ri Haveli
-                </h1>
-              </div>
-            </motion.div>
+    <motion.header
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-amber-200"
+    >
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                Jee Ri Haveli
+              </h1>
+            </div>
+          </motion.div>
 
-            <nav className="hidden md:flex items-center space-x-8">
-              {[
-                { label: "Home", href: "/" },
+          <nav className="hidden md:flex items-center space-x-8">
+            {[
+              { label: "Home", href: "/" },
                 { label: "Restaurant", href: "/restaurant" },
-                { label: "Places to Visit", href: "/places-to-visit" },
-                { label: "Experience", href: "/experience" },
-                { label: "Celebrities", href: "/celebrities" },
-                { label: "Book Now", href: "/book" },
-                { label: "Location", href: "/location" },
+              { label: "Places to Visit", href: "/places-to-visit" },
+              { label: "Experience", href: "/experience" },
+              { label: "Celebrities", href: "/celebrities" },
+              { label: "Gallery", href: "/gallery" },
+              { label: "Location", href: "/location" },
                 { label: "Contact", href: "/contact" },
-              ].map((item) => (
-                item.href.startsWith("/#") ? (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-300 text-sm"
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-300 text-sm"
-                  >
-                    {item.label}
-                  </Link>
-                )
-              ))}
-            </nav>
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/book">
-                <Button 
-                  className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-6 py-2 rounded-full shadow-lg" 
+            ].map((item) => (
+              item.href.startsWith("/#") ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-300 text-sm"
                 >
-                  Book Now
-                </Button>
-              </Link>
-            </motion.div>
-          </div>
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-300 text-sm"
+                >
+                  {item.label}
+                </Link>
+              )
+            ))}
+          </nav>
+
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link href="/book">
+              <Button 
+                className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-6 py-2 rounded-full shadow-lg" 
+              >
+                Book Now
+              </Button>
+            </Link>
+          </motion.div>
         </div>
-      </motion.header>
+      </div>
+    </motion.header>
       {/* Floating WhatsApp Button */}
       <a
         href="https://wa.me/919351733007"

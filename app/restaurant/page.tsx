@@ -25,7 +25,7 @@ export default function RestaurantPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 pt-28">
-      <h1 className="text-4xl md:text-5xl font-bold text-center text-purple-700 py-10">Rooftop Restaurant</h1>
+      <h1 className="text-4xl md:text-5xl font-bold text-center text-purple-700 py-10">Roof Top Restaurant</h1>
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4">
         {restaurantImages.map((src, idx) => (
           <div key={src} className="relative w-full aspect-[4/3] bg-white rounded-xl shadow-lg overflow-hidden flex items-center justify-center">
