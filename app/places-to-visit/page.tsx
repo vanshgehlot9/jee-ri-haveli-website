@@ -10,7 +10,7 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react"
 const places = [
   {
     name: "Mehrangarh Fort",
-    image: "/images/places/mehrangarh.webp",
+    image: "/images/WhatsApp Image 2025-07-11 at 14.29.59.jpeg",
     images: [
       "/images/places/mehrangarh.webp",
       "/images/places/Entrance Part in Jodhpur Fort.jpg",
@@ -57,6 +57,36 @@ const places = [
     distance: "5KM from City Center",
     bestTime: "9:00 AM - 5:00 PM",
     entryFee: "₹100 for Museum"
+  },
+  {
+    name: "Clock Tower (Ghanta Ghar)",
+    image: "/images/clock.jpg",
+    images: [
+      "/images/clock.jpg",
+      "/images/clock1.jpg",
+      "/images/clock2.jpg"
+    ],
+    description:
+      "A popular landmark in the old city, surrounded by the vibrant Sardar Market. Explore narrow alleys filled with spices, textiles, and handicrafts.",
+    detailedDescription: `The Clock Tower, built in the late 19th century, is a prominent landmark in the heart of Jodhpur's old city. Surrounded by the bustling Sardar Market, it's a perfect place to experience local culture and shopping. The market area is famous for its spices, textiles, silver jewelry, and traditional handicrafts. The narrow alleys around the clock tower are filled with small shops selling everything from traditional Rajasthani clothes to local sweets and snacks. The area comes alive in the evening with street food vendors and local entertainment.`,
+    distance: "Old City Center",
+    bestTime: "Morning or Evening",
+    entryFee: "Free"
+  },
+  {
+    name: "Toorji Ka Jhalra (Step Well)",
+    image: "/images/t.jpeg",
+    images: [
+      "/images/places/toorji.jpg",
+      "/images/places/step1.jpg",
+      "/images/places/step2.jpg"
+    ],
+    description:
+      "A historic step well built in the 1740s, open 24/7. Admire its unique architecture and enjoy the lively atmosphere around it.",
+    detailedDescription: `Toorji Ka Jhalra, built in the 1740s by Queen Toorji, is one of the most beautiful step wells in Rajasthan. The step well features intricate carvings and architectural details that showcase the craftsmanship of the era. The surrounding area has been revitalized with cafes, restaurants, and shops, making it a popular spot for both locals and tourists. The step well is open 24/7 and is particularly beautiful when illuminated at night. The area around the step well has become a cultural hub with regular events and performances.`,
+    distance: "Old City Area",
+    bestTime: "Any Time",
+    entryFee: "Free"
   },
   {
     name: "Rao Jodha Desert Rock Park",
@@ -139,36 +169,7 @@ const places = [
     bestTime: "Morning",
     entryFee: "₹100 for Adults, ₹50 for Children"
   },
-  {
-    name: "Clock Tower (Ghanta Ghar)",
-    image: "/images/clock.jpg",
-    images: [
-      "/images/clock.jpg",
-      "/images/clock1.jpg",
-      "/images/clock2.jpg"
-    ],
-    description:
-      "A popular landmark in the old city, surrounded by the vibrant Sardar Market. Explore narrow alleys filled with spices, textiles, and handicrafts.",
-    detailedDescription: `The Clock Tower, built in the late 19th century, is a prominent landmark in the heart of Jodhpur's old city. Surrounded by the bustling Sardar Market, it's a perfect place to experience local culture and shopping. The market area is famous for its spices, textiles, silver jewelry, and traditional handicrafts. The narrow alleys around the clock tower are filled with small shops selling everything from traditional Rajasthani clothes to local sweets and snacks. The area comes alive in the evening with street food vendors and local entertainment.`,
-    distance: "Old City Center",
-    bestTime: "Morning or Evening",
-    entryFee: "Free"
-  },
-  {
-    name: "Toorji Ka Jhalra (Step Well)",
-    image: "/images/places/step.jpeg",
-    images: [
-      "/images/places/step.jpeg",
-      "/images/places/step1.jpg",
-      "/images/places/step2.jpg"
-    ],
-    description:
-      "A historic step well built in the 1740s, open 24/7. Admire its unique architecture and enjoy the lively atmosphere around it.",
-    detailedDescription: `Toorji Ka Jhalra, built in the 1740s by Queen Toorji, is one of the most beautiful step wells in Rajasthan. The step well features intricate carvings and architectural details that showcase the craftsmanship of the era. The surrounding area has been revitalized with cafes, restaurants, and shops, making it a popular spot for both locals and tourists. The step well is open 24/7 and is particularly beautiful when illuminated at night. The area around the step well has become a cultural hub with regular events and performances.`,
-    distance: "Old City Area",
-    bestTime: "Any Time",
-    entryFee: "Free"
-  },
+ 
 ]
 
 export default function PlacesToVisitPage() {
@@ -199,7 +200,7 @@ export default function PlacesToVisitPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
       {/* Hero Section */}
-      <section className="relative w-full h-[60vh] min-h-[350px] flex items-center justify-center overflow-hidden mb-10">
+      <section className="relative w-full h-[40vh] sm:h-[60vh] min-h-[250px] md:min-h-[350px] flex items-center justify-center overflow-hidden mb-10 px-2">
         <Image
           src="/images/WhatsApp Image 2025-07-11 at 14.29.59.jpeg"
           alt="Mehrangarh Fort, Jodhpur"
@@ -230,7 +231,7 @@ export default function PlacesToVisitPage() {
             Places to Visit in Jodhpur
           </h1>
         </motion.div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
           {places.map((place, idx) => (
             <motion.div
               key={place.name}
@@ -274,7 +275,7 @@ export default function PlacesToVisitPage() {
 
       {/* Detailed Modal */}
       <Dialog open={!!selectedPlace} onOpenChange={() => setSelectedPlace(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-full sm:max-w-4xl max-h-[90vh] overflow-y-auto p-4">
           <DialogHeader>
             <DialogTitle className="text-3xl font-bold text-amber-700">
               {selectedPlace?.name}
@@ -340,7 +341,7 @@ export default function PlacesToVisitPage() {
                   <div className="text-center p-4 bg-amber-50 rounded-lg flex flex-col items-center justify-center">
                     <h4 className="font-semibold text-amber-700 mb-1">Distance</h4>
                     <div className="flex items-center gap-2 justify-center">
-                      <p className="text-gray-600">{selectedPlace.distance}</p>
+                    <p className="text-gray-600">{selectedPlace.distance}</p>
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedPlace.name + ' Jodhpur')}`}
                         target="_blank"

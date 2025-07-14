@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import Header from "@/components/header"
-
+import Footer from "@/components/footer";
 
 
 function HeaderWrapper({ children }: { children: React.ReactNode }) {
@@ -21,6 +21,9 @@ function HeaderWrapper({ children }: { children: React.ReactNode }) {
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <HeaderWrapper>{children}</HeaderWrapper>
-  )
+    <HeaderWrapper>
+      <div className="pt-20 md:pt-24">{children}</div>
+      <Footer />
+    </HeaderWrapper>
+  );
 } 

@@ -42,7 +42,7 @@ const celebrities = [
 export default function CelebritiesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20">
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="container mx-auto px-4 max-w-6xl w-full">
         <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Celebrities at Jee Ri Haveli</h1>
         <div className="grid gap-10">
           {celebrities.map((item, idx) => (

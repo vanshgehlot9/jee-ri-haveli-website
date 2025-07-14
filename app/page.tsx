@@ -194,12 +194,12 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange">
 
       {/* Hero Section */}
       <section
         id="home"
-        className="relative w-full aspect-[16/7] min-h-[400px] flex items-center justify-center overflow-hidden"
+        className="relative w-full aspect-[16/10] min-h-[400px] flex items-center justify-center overflow-hidden"
       >
         <Image
           src="/images/slider2.jpg"
@@ -229,129 +229,7 @@ export default function HomePage() {
             Experience the royal palace on Gulab Sagar Lake with breathtaking views of Mehrangarh Fort
           </motion.p>
         </div>
-        {/* Booking Widget (desktop) */}
-        <div className="absolute right-8 bottom-8 z-30 max-w-sm w-full hidden md:block">
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-5 border border-amber-100 min-w-[300px] max-w-[340px]">
-            <h3 className="text-base font-bold text-gray-800 mb-2">Check Availability</h3>
-            <form className="space-y-2" onSubmit={checkAvailability}>
-              <div>
-                <label className="text-xs font-medium text-gray-600">Check In</label>
-                <input 
-                  type="date" 
-                  name="checkIn" 
-                  value={widget.checkIn} 
-                  onChange={handleWidgetChange} 
-                  min={new Date().toISOString().split('T')[0]}
-                  required 
-                  className="w-full p-1 border rounded text-xs" 
-                />
-              </div>
-              <div>
-                <label className="text-xs font-medium text-gray-600">Check Out</label>
-                <input 
-                  type="date" 
-                  name="checkOut" 
-                  value={widget.checkOut} 
-                  onChange={handleWidgetChange} 
-                  min={widget.checkIn || new Date().toISOString().split('T')[0]}
-                  required 
-                  className="w-full p-1 border rounded text-xs" 
-                />
-              </div>
-              <div>
-                <label className="text-xs font-medium text-gray-600">Room Type</label>
-                <select name="roomType" value={widget.roomType} onChange={handleWidgetChange} className="w-full p-1 border rounded text-xs">
-                  {rooms.map((room) => (
-                    <option key={room.name} value={room.name}>{room.name}</option>
-                  ))}
-                </select>
-              </div>
-              <Button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold" disabled={loading}>
-                {loading ? "Checking..." : "Check Availability"}
-              </Button>
-              {loading && (
-                <div className="text-center text-xs mt-1 text-blue-600">Checking availability...</div>
-              )}
-              {availability && !loading && (
-                <div className={`text-center text-xs mt-1 font-semibold ${
-                  availability.includes("Available") ? "text-green-600" : 
-                  availability.includes("Error") ? "text-red-600" : "text-amber-700"
-                }`}>
-                  {availability}
-                </div>
-              )}
-              {canBook && (
-                <Link href="/book">
-                  <Button type="button" className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs font-bold">
-                    Book Now
-                  </Button>
-                </Link>
-              )}
-            </form>
-          </div>
-        </div>
       </section>
-      {/* Mobile Booking Widget */}
-      <div className="block md:hidden px-4 mt-4">
-        <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-5 border border-amber-100 min-w-[300px] max-w-[340px] mx-auto">
-          <h3 className="text-base font-bold text-gray-800 mb-2">Check Availability</h3>
-          <form className="space-y-2" onSubmit={checkAvailability}>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Check In</label>
-              <input 
-                type="date" 
-                name="checkIn" 
-                value={widget.checkIn} 
-                onChange={handleWidgetChange} 
-                min={new Date().toISOString().split('T')[0]}
-                required 
-                className="w-full p-1 border rounded text-xs" 
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Check Out</label>
-              <input 
-                type="date" 
-                name="checkOut" 
-                value={widget.checkOut} 
-                onChange={handleWidgetChange} 
-                min={widget.checkIn || new Date().toISOString().split('T')[0]}
-                required 
-                className="w-full p-1 border rounded text-xs" 
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600">Room Type</label>
-              <select name="roomType" value={widget.roomType} onChange={handleWidgetChange} className="w-full p-1 border rounded text-xs">
-                {rooms.map((room) => (
-                  <option key={room.name} value={room.name}>{room.name}</option>
-                ))}
-              </select>
-            </div>
-            <Button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg text-xs font-bold" disabled={loading}>
-              {loading ? "Checking..." : "Check Availability"}
-            </Button>
-            {loading && (
-              <div className="text-center text-xs mt-1 text-blue-600">Checking availability...</div>
-            )}
-            {availability && !loading && (
-              <div className={`text-center text-xs mt-1 font-semibold ${
-                availability.includes("Available") ? "text-green-600" : 
-                availability.includes("Error") ? "text-red-600" : "text-amber-700"
-              }`}>
-                {availability}
-              </div>
-            )}
-            {canBook && (
-              <Link href="/book">
-                <Button type="button" className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs font-bold">
-                  Book Now
-                </Button>
-              </Link>
-            )}
-          </form>
-        </div>
-      </div>
 
       {/* About Section */}
       <section id="about" className="py-20 bg-white">
@@ -615,7 +493,7 @@ export default function HomePage() {
 
       {/* Room Details Modal */}
       <Dialog open={showRoomModal} onOpenChange={setShowRoomModal}>
-        <DialogContent>
+        <DialogContent className="max-w-full sm:max-w-lg p-4">
           <DialogHeader>
             <DialogTitle>{roomDetail?.name}</DialogTitle>
           </DialogHeader>
@@ -700,7 +578,7 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+          <motion.div variants={fadeInUp} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
             <div className="text-center p-4">
               <Image
                 src="/images/badges/tp-2013.jpg"
@@ -936,79 +814,7 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold">Jee Ri Haveli</h3>
-                </div>
-              </div>
-              <p className="text-gray-400 mb-4">
-                Experience the grandeur of Rajasthani heritage with modern luxury and comfort.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-bold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                {["About Us", "Rooms", "Amenities", "Gallery", "Contact"].map((item) => (
-                  <li key={item}>
-                    <Link
-                      href={`#${item.toLowerCase().replace(" ", "")}`}
-                      className="text-gray-400 hover:text-amber-400 transition-colors"
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-bold mb-4">Policy</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/hotel-policy" className="text-gray-400 hover:text-amber-400 transition-colors">Hotel Policy</Link>
-                </li>
-                <li>
-                  <Link href="/terms" className="text-gray-400 hover:text-amber-400 transition-colors">Terms & Conditions</Link>
-                </li>
-                <li>
-                  <Link href="/privacy" className="text-gray-400 hover:text-amber-400 transition-colors">Privacy Policy</Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-bold mb-4">Payment Methods</h4>
-              <div className="flex space-x-2 mb-4">
-                <div className="w-12 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                  VISA
-                </div>
-                <div className="w-12 h-8 bg-red-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                  MC
-                </div>
-                <div className="w-12 h-8 bg-orange-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                  DC
-                </div>
-                <div className="w-12 h-8 bg-blue-800 rounded flex items-center justify-center text-white text-xs font-bold">
-                  AE
-                </div>
-              </div>
-              <p className="text-gray-400 text-sm">We accept all major credit cards</p>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Jee Ri Haveli. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+     
     </div>
   )
 }

@@ -8,17 +8,17 @@ export default function LocationPage() {
       <h1 className="text-3xl font-bold text-center text-purple-700 mb-8">Location</h1>
       {/* Google Map */}
       <div className="w-full h-72 md:h-96 rounded-xl overflow-hidden shadow mb-8">
-        <iframe
+          <iframe
           src="https://www.google.com/maps?q=Jee+Ri+Haveli,+Gulab+Sagar,+Jodhpur,+Rajasthan,+India&output=embed"
-          width="100%"
+            width="100%"
           height="100%"
-          style={{ border: 0 }}
-          allowFullScreen={true}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
+            style={{ border: 0 }}
+            allowFullScreen={true}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
           title="Jee Ri Haveli Location"
-        ></iframe>
-      </div>
+          ></iframe>
+        </div>
       {/* Address & Distances */}
       <div className="bg-white/90 rounded-xl shadow p-6 mb-8">
         <h2 className="text-xl font-semibold text-amber-700 mb-2">Jee Ri Haveli</h2>
@@ -27,7 +27,7 @@ export default function LocationPage() {
         <p className="mb-2">Mobile: <a href="tel:+919351722007" className="text-blue-700 hover:underline">+91-93517-22007</a>, <a href="tel:+919351733007" className="text-blue-700 hover:underline">+91-93517-33007</a>, <a href="tel:+916375144341" className="text-blue-700 hover:underline">+91-6375144341</a></p>
         <p className="mb-2">Email: <a href="mailto:info@jeerihaveli.com" className="text-blue-700 hover:underline">info@jeerihaveli.com</a></p>
         <p className="mb-2">Website: <a href="http://www.jeerihaveli.com" className="text-blue-700 hover:underline">www.jeerihaveli.com</a></p>
-      </div>
+        </div>
       {/* Distances */}
       <div className="bg-white/90 rounded-xl shadow p-6">
         <h3 className="text-lg font-semibold text-amber-700 mb-4">Distance from Jee Ri Haveli</h3>

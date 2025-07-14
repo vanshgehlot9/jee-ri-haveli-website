@@ -3,8 +3,6 @@ import { Card } from "@/components/ui/card";
 
 // Define the images manually since we can't use fs in client components
 const images = [
-  "ASM_7765.jpg",
-  "ASM_7766.jpg", 
   "ASM_7767.jpg",
   "ASM_7775.jpg",
   "ASM_7852.jpg",

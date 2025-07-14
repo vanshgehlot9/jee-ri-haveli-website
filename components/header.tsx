@@ -6,54 +6,54 @@ import { Sparkles } from "lucide-react"
 import Link from "next/link"
 import { MessageCircle } from 'lucide-react';
 import { useState } from "react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 
 interface HeaderProps {
   onBookNowClick?: () => void
 }
 
 export default function Header({ onBookNowClick }: HeaderProps) {
-  const [showGallery, setShowGallery] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   return (
     <>
-    <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-amber-200"
-    >
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                Jee Ri Haveli
-              </h1>
-            </div>
-          </motion.div>
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-amber-200"
+      >
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3">
+              <Link href="/" className="flex items-center gap-3">
+                <Image
+                  src="/images/logo.jpeg"
+                  alt="Jee Ri Haveli Logo"
+                  width={48}
+                  height={48}
+                  className="rounded-full shadow-md object-contain bg-white p-1 border border-gray-200"
+                  priority
+                />
+                <div className="flex flex-col leading-tight">
+                  <span className="text-2xl md:text-3xl font-cursive font-semibold text-[#7c4a6a] tracking-wide" style={{ fontFamily: 'cursive, serif' }}>Jee Ri Haveli</span>
+                  <span className="text-sm md:text-base text-gray-700 mt-0.5" style={{ fontFamily: 'sans-serif' }}>(A Moderate Heritage Haveli)</span>
+                </div>
+              </Link>
+            </motion.div>
 
-          <nav className="hidden md:flex items-center space-x-8">
-            {[
-              { label: "Home", href: "/" },
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center space-x-8">
+              {[
+                { label: "Home", href: "/" },
                 { label: "Restaurant", href: "/restaurant" },
-              { label: "Places to Visit", href: "/places-to-visit" },
-              { label: "Experience", href: "/experience" },
-              { label: "Celebrities", href: "/celebrities" },
-              { label: "Gallery", href: "/gallery" },
-              { label: "Location", href: "/location" },
+                { label: "Places to Visit", href: "/places-to-visit" },
+                { label: "Experience", href: "/experience" },
+                { label: "Celebrities", href: "/celebrities" },
+                { label: "Gallery", href: "/gallery" },
+                { label: "Location", href: "/location" },
                 { label: "Contact", href: "/contact" },
-            ].map((item) => (
-              item.href.startsWith("/#") ? (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-300 text-sm"
-                >
-                  {item.label}
-                </a>
-              ) : (
+              ].map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
@@ -61,22 +61,68 @@ export default function Header({ onBookNowClick }: HeaderProps) {
                 >
                   {item.label}
                 </Link>
-              )
-            ))}
-          </nav>
+              ))}
+            </nav>
 
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link href="/book">
-              <Button 
-                className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-6 py-2 rounded-full shadow-lg" 
-              >
-                Book Now
-              </Button>
-            </Link>
-          </motion.div>
+            {/* Mobile Hamburger Icon */}
+            <button
+              className="md:hidden flex items-center justify-center p-2 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              onClick={() => setShowMobileMenu(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="w-7 h-7 text-amber-700" />
+            </button>
+
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden md:block">
+              <Link href="/book">
+                <Button 
+                  className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-6 py-2 rounded-full shadow-lg" 
+                >
+                  Book Now
+                </Button>
+              </Link>
+            </motion.div>
+          </div>
         </div>
-      </div>
-    </motion.header>
+      </motion.header>
+
+      {/* Mobile Menu Drawer */}
+      {showMobileMenu && (
+        <div className="fixed inset-0 z-[200] bg-black/40 flex justify-end md:hidden">
+          <div className="w-72 bg-white h-full shadow-xl flex flex-col p-6 relative animate-slideInRight">
+            <button
+              className="absolute top-4 right-4 p-2 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+              onClick={() => setShowMobileMenu(false)}
+              aria-label="Close menu"
+            >
+              <X className="w-6 h-6 text-amber-700" />
+            </button>
+            <nav className="flex flex-col gap-4 mt-10">
+              {[
+                { label: "Home", href: "/" },
+                { label: "Restaurant", href: "/restaurant" },
+                { label: "Places to Visit", href: "/places-to-visit" },
+                { label: "Experience", href: "/experience" },
+                { label: "Celebrities", href: "/celebrities" },
+                { label: "Gallery", href: "/gallery" },
+                { label: "Location", href: "/location" },
+                { label: "Contact", href: "/contact" },
+                { label: "Book Now", href: "/book" },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="text-gray-800 hover:text-amber-600 font-semibold text-lg py-2 px-2 rounded transition-colors duration-200"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
+
       {/* Floating WhatsApp Button */}
       <a
         href="https://wa.me/919351733007"
@@ -95,5 +141,5 @@ export default function Header({ onBookNowClick }: HeaderProps) {
         </svg>
       </a>
     </>
-  )
+  );
 } 
