@@ -8,8 +8,8 @@ export default function HotelPolicyPage() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-2">Check-In and Check-Out</h2>
           <ul className="list-disc pl-6 text-gray-700 text-lg">
-            <li><strong>Check-In:</strong> 2:00 PM</li>
-            <li><strong>Check-Out:</strong> 11:00 AM. Kindly return your room key to the reception desk at check-out.</li>
+            <li><strong>Check-In:</strong> 11:00 AM</li>
+            <li><strong>Check-Out:</strong> 10:00 AM. Kindly return your room key to the reception desk at check-out.</li>
           </ul>
         </section>
         <section className="mb-8">

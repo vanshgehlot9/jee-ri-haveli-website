@@ -26,8 +26,8 @@ export default function TermsPage() {
           <li>
             <strong>Check-In and Check-Out</strong>
             <ul className="list-disc pl-6">
-              <li>Check-In Time: 2:00 PM</li>
-              <li>Check-Out Time: 11:00 AM</li>
+              <li>Check-In Time: 11:00 AM</li>
+              <li>Check-Out Time: 10:00 AM</li>
               <li>Late check-outs may be subject to additional charges and are subject to availability.</li>
             </ul>
           </li>
