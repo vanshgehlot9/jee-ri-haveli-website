@@ -25,6 +25,7 @@ import Link from "next/link"
 import { useState } from "react"
 import RooftopRestaurant from "@/components/rooftop-restaurant"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
+import HeroSlider from "@/components/hero-slider";
 
 
 const fadeInUp = {
@@ -197,38 +198,8 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange">
 
       {/* Hero Section */}
-      <section
-        id="home"
-        className="relative w-full aspect-[16/10] min-h-[400px] flex items-center justify-center overflow-hidden"
-      >
-        <Image
-          src="/images/slider2.jpg"
-          alt="Rooftop Restaurant at Jee Ri Haveli with Mehrangarh Fort view"
-          fill
-          className="object-contain object-center transition-all duration-500 rounded-b-3xl shadow-xl"
-          priority
-          sizes="100vw"
-          quality={95}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10 rounded-b-3xl" />
-        <div className="relative z-20 text-center text-white px-4 w-full">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-amber-200 to-orange-200 bg-clip-text text-transparent drop-shadow-lg tracking-tight"
-          >
-            Welcome to Jee Ri Haveli
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-lg md:text-2xl mb-6 max-w-2xl mx-auto leading-relaxed drop-shadow font-medium"
-          >
-            Experience the royal palace on Gulab Sagar Lake with breathtaking views of Mehrangarh Fort
-          </motion.p>
-        </div>
+      <section className="mb-8">
+        <HeroSlider />
       </section>
 
       {/* About Section */}
