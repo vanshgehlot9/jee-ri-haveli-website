@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { motion } from 'framer-motion';
 
 const rooms = [
   { name: "Deluxe Room", price: "₹2,500" },
@@ -223,10 +224,10 @@ export default function AdminPage() {
 
   if (!loggedIn) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 flex items-center justify-center py-10">
-        <div className="container mx-auto px-4 max-w-md">
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h1 className="text-3xl font-bold mb-6 text-center">Admin Login</h1>
+      <motion.div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 flex items-center justify-center py-10" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
+        <motion.div className="container mx-auto px-2 sm:px-4 max-w-md" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Admin Login</h1>
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
@@ -247,43 +248,40 @@ export default function AdminPage() {
               </button>
             </form>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-10">
+    <motion.div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-6 sm:py-10" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
       {/* Notification Sound */}
       <audio ref={audioRef} preload="auto">
         <source src="/notification.mp3" type="audio/mpeg" />
         <source src="/notification.wav" type="audio/wav" />
       </audio>
-      
       {/* New Booking Notification */}
       {newBookingNotification && (
-        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg animate-pulse">
+        <motion.div className="fixed top-4 right-2 sm:right-4 z-50 bg-green-500 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-lg animate-pulse" initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-white rounded-full animate-ping"></div>
             <span className="font-semibold">🎉 New Booking Received!</span>
           </div>
-          <p className="text-sm mt-1">Check the bookings table below</p>
-        </div>
+          <p className="text-xs sm:text-sm mt-1">Check the bookings table below</p>
+        </motion.div>
       )}
-      
-      <div className="container mx-auto px-4 max-w-6xl">
-        <h1 className="text-3xl font-bold mb-6 text-center">Admin Panel</h1>
-        
+      <motion.div className="container mx-auto px-2 sm:px-4 max-w-6xl" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Admin Panel</h1>
         {/* Floor Availability Management */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Floor Availability Management</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <motion.div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4">Floor Availability Management</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             {floors.map((floor) => (
-              <div key={floor} className="border rounded-lg p-4">
+              <motion.div key={floor} className="border rounded-lg p-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 * floors.indexOf(floor) }}>
                 <h3 className="font-semibold text-lg mb-3">{floor}</h3>
                 <div className="space-y-3">
                   {rooms.map((room) => (
-                    <div key={room.name} className="flex items-center justify-between">
+                    <motion.div key={room.name} className="flex items-center justify-between" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 * rooms.indexOf(room) }}>
                       <span className="text-sm font-medium">{room.name}</span>
                       <div className="flex items-center space-x-2">
                         <input
@@ -298,48 +296,47 @@ export default function AdminPage() {
                           / {floorAvailability[floor as keyof typeof floorAvailability][room.name as keyof typeof floorAvailability[typeof floor]].total}
                         </span>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
           <div className="mt-4 flex justify-end">
             <button
               onClick={saveFloorAvailability}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold"
+              className="bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold"
             >
               Save Changes
             </button>
           </div>
-        </div>
-
-        <h2 className="text-xl font-semibold mb-2">Room Booking Summary</h2>
-        <div className="mb-6 flex gap-4">
+        </motion.div>
+        <motion.h2 className="text-lg sm:text-xl font-semibold mb-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>Room Booking Summary</motion.h2>
+        <motion.div className="mb-6 flex flex-wrap gap-2 sm:gap-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           {Object.entries(roomSummary).map(([room, count]) => (
-            <div key={room} className="bg-white rounded shadow p-4">
+            <motion.div key={room} className="bg-white rounded shadow p-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 * Object.keys(roomSummary).indexOf(room) }}>
               <div className="font-bold">{room}</div>
               <div>{count} bookings</div>
-            </div>
+            </motion.div>
           ))}
-        </div>
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">All Bookings</h2>
+        </motion.div>
+        <motion.div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2 sm:gap-0" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <motion.h2 className="text-lg sm:text-xl font-semibold" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>All Bookings</motion.h2>
           <button
             onClick={fetchBookings}
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold disabled:opacity-50"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold disabled:opacity-50"
           >
             {loading ? 'Refreshing...' : '🔄 Refresh'}
           </button>
-        </div>
+        </motion.div>
         {loading ? (
           <div>Loading...</div>
         ) : bookings.length === 0 ? (
           <div>No bookings found.</div>
         ) : (
-          <div className="bg-white rounded-lg shadow overflow-x-auto">
-            <table className="w-full">
+          <motion.div className="bg-white rounded-lg shadow overflow-x-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <table className="w-full min-w-[600px] text-xs sm:text-sm">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="p-2 border text-left">Name</th>
@@ -356,7 +353,7 @@ export default function AdminPage() {
               </thead>
               <tbody>
                 {bookings.map((b, i) => (
-                  <tr key={b.id || i} className={b.status === 'cancelled' ? "bg-red-100" : ""}>
+                  <motion.tr key={b.id || i} className={b.status === 'cancelled' ? "bg-red-100" : ""} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 * i }}>
                     <td className="p-2 border">{b.name}</td>
                     <td className="p-2 border">{b.email}</td>
                     <td className="p-2 border">{b.phone}</td>
@@ -385,15 +382,15 @@ export default function AdminPage() {
                         </button>
                       )}
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
-          </div>
+          </motion.div>
         )}
-        <h2 className="text-xl font-semibold mb-2 mt-8">Mark Room as Unavailable</h2>
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <form onSubmit={handleUnavailSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+        <motion.h2 className="text-lg sm:text-xl font-semibold mb-2 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>Mark Room as Unavailable</motion.h2>
+        <motion.div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <form onSubmit={handleUnavailSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Floor</label>
               <select
@@ -463,17 +460,16 @@ export default function AdminPage() {
             </div>
           </form>
           {unavailMsg && (
-            <div className={`mt-4 p-3 rounded text-sm ${
+            <motion.div className={`mt-4 p-3 rounded text-xs sm:text-sm ${
               unavailMsg.includes("successfully") ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-            }`}>
+            }`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
               {unavailMsg}
-            </div>
+            </motion.div>
           )}
-        </div>
-
-        <h2 className="text-xl font-semibold mb-2">Unavailable Periods</h2>
-        <div className="bg-white rounded-lg shadow overflow-x-auto">
-          <table className="w-full">
+        </motion.div>
+        <motion.h2 className="text-lg sm:text-xl font-semibold mb-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>Unavailable Periods</motion.h2>
+        <motion.div className="bg-white rounded-lg shadow overflow-x-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <table className="w-full min-w-[500px] text-xs sm:text-sm">
             <thead className="bg-gray-50">
               <tr>
                 <th className="p-2 border text-left">Floor</th>
@@ -486,7 +482,7 @@ export default function AdminPage() {
             </thead>
             <tbody>
               {unavailable.map((u, i) => (
-                <tr key={u.id || i}>
+                <motion.tr key={u.id || i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 * i }}>
                   <td className="p-2 border">{u.floor}</td>
                   <td className="p-2 border">{u.roomType}</td>
                   <td className="p-2 border">{new Date(u.start).toLocaleDateString()}</td>
@@ -500,19 +496,19 @@ export default function AdminPage() {
                       Remove
                     </button>
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
-        </div>
-        <h2 className="text-xl font-semibold mb-2 mt-8">Table Reservations</h2>
+        </motion.div>
+        <motion.h2 className="text-lg sm:text-xl font-semibold mb-2 mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>Table Reservations</motion.h2>
         {tableLoading ? (
           <div>Loading...</div>
         ) : tableReservations.length === 0 ? (
           <div>No table reservations found.</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white rounded shadow text-sm">
+          <motion.div className="overflow-x-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <table className="min-w-full bg-white rounded shadow text-xs sm:text-sm">
               <thead>
                 <tr>
                   <th className="p-2 border">Name</th>
@@ -527,7 +523,7 @@ export default function AdminPage() {
               </thead>
               <tbody>
                 {tableReservations.map((r, i) => (
-                  <tr key={r.id || i}>
+                  <motion.tr key={r.id || i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 * i }}>
                     <td className="p-2 border">{r.name}</td>
                     <td className="p-2 border">{r.email}</td>
                     <td className="p-2 border">{r.phone}</td>
@@ -540,13 +536,13 @@ export default function AdminPage() {
                       </span>
                     </td>
                     <td className="p-2 border">{r.createdAt ? new Date(r.createdAt).toLocaleString() : ""}</td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
-          </div>
+          </motion.div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 } 

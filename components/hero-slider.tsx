@@ -4,13 +4,11 @@ const images = [
   "/images/slider2.jpg",
   "/images/slider1.jpg",
   "/images/slider3.jpg",
-  "/images/slider4.png",
-  "/images/slider5.jpg",
-  "/images/slider6.jpg",
 ];
 
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const length = images.length;
 
   useEffect(() => {

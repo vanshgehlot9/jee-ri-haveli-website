@@ -63,7 +63,6 @@ export default function HomePage() {
   const rooms = [
     {
       name: "Deluxe Room",
-      price: "₹2,500",
       images: [
         "/images/deluxe.jpg",
         "/images/DELUXE ROOM/DSC_0933.jpg",
@@ -72,23 +71,20 @@ export default function HomePage() {
         "/images/DELUXE ROOM/DSC_0935.jpg",
       ],
       description: "Our Deluxe Room offers a blend of traditional Rajasthani decor and modern comfort, featuring a king-size bed, private balcony, and a stunning city view. Perfect for couples or solo travelers seeking luxury and relaxation.",
-      features: ["King Bed", "City View", "Balcony" , "Sitting Area" , "Tea Service"],
+      features: ["King Bed", "City View", "Balcony", "Sitting Area", "Tea Service"],
     },
     {
       name: "Standard Room",
-      price: "₹1,800",
       images: [
-        "/images/standard.jpg",
-        "/images/standard1.jpg",
-        "/images/standard2.jpg",
-        "/images/standard3.jpg",
+        "/images/IMG_4643.JPG",
+        "images/IMG_4646.JPG",
+        "images/IMG_4639.JPG",
       ],
       description: "Our Standard Room is designed for comfort and convenience, offering a cozy sitting area, balcony, and beautiful city views. Ideal for business travelers or families on a budget.",
-      features: ["City View" , "Balcony" , "Sitting Area"],
+      features: ["City View", "Balcony", "Sitting Area"],
     },
     {
       name: "Standard Room without Balcony",
-      price: "₹1,500",
       images: [
         "/images/STANDARD ROOM WITHOUT BALCONY/ASM_7787.jpg",
         "/images/STANDARD ROOM WITHOUT BALCONY/ASM_7789.jpg",
@@ -96,7 +92,7 @@ export default function HomePage() {
         "/images/STANDARD ROOM WITHOUT BALCONY/DSC_0997.jpg",
       ],
       description: "Our Standard Room without Balcony offers comfortable accommodation with all essential amenities, perfect for budget-conscious travelers.",
-      features: ["City View" , "Sitting Area"],
+      features: ["City View", "Sitting Area"],
     },
   ]
 
@@ -198,9 +194,29 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange">
 
       {/* Hero Section */}
-      <section className="mb-8">
+      <motion.section className="mb-8" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
         <HeroSlider />
-      </section>
+      </motion.section>
+
+      {/* Welcome Section */}
+      <motion.section className="max-w-5xl mx-auto px-4 md:px-8 py-8 md:py-16 text-center" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent drop-shadow-lg tracking-tight"
+        >
+          Welcome to Jee Ri Haveli
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="text-base sm:text-lg md:text-2xl mb-6 max-w-2xl mx-auto leading-relaxed drop-shadow font-medium"
+        >
+          Experience the royal palace on Gulab Sagar Lake with breathtaking views of Mehrangarh Fort
+        </motion.p>
+      </motion.section>
 
       {/* About Section */}
       <section id="about" className="py-20 bg-white">
@@ -274,129 +290,47 @@ export default function HomePage() {
       <RooftopRestaurant />
 
       {/* Rooms Section */}
-      <section id="rooms" className="py-20 bg-gradient-to-b from-amber-50 to-orange-50">
-        <div className="container mx-auto px-4">
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="max-w-6xl mx-auto"
-          >
-            <motion.div variants={fadeInUp} className="text-center mb-16">
-              <Badge className="mb-4 bg-orange-100 text-orange-800 px-4 py-2">Accommodation</Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                Luxurious{" "}
-                <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                  Rooms & Suites
-                </span>
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Each room is thoughtfully designed to blend traditional aesthetics with modern amenities
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {rooms.map((room, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  whileHover={{ y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className="group cursor-pointer"
-                  onMouseEnter={() => setActiveRoom(index)}
-                >
-                  <Card className="overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
-                    <div className="relative overflow-hidden">
-                      <Image
-                        src={room.images[0] || "/placeholder.svg"}
-                        alt={room.name}
-                        width={400}
-                        height={300}
-                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                        <span className="text-amber-600 font-bold">{room.price}/night</span>
-                      </div>
-                    </div>
-                    <CardContent className="p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">{room.name}</h3>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {room.features.map((feature, idx) => (
-                          <Badge key={idx} variant="secondary" className="bg-amber-100 text-amber-800">
-                            {feature}
-                          </Badge>
-                        ))}
-                      </div>
-                      <Button className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white" onClick={() => openRoomModal(room)}>
-                        View Details
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Booking CTA */}
-            <motion.div variants={fadeInUp} className="text-center mt-12">
-              <div className="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-8 text-white">
-                <h3 className="text-2xl font-bold mb-4">Ready to Experience Royal Luxury?</h3>
-                <p className="text-lg mb-6 opacity-90">Book your stay at Jee Ri Haveli and create unforgettable memories</p>
-                <div className="flex justify-center">
-                  <Link href="/book">
-                    <Button className="bg-white text-amber-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold">
-                      Book Your Stay
-                    </Button>
-                  </Link>
-                </div>
+      <motion.section className="max-w-6xl mx-auto px-2 sm:px-4 md:px-8 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" initial="hidden" animate="visible" variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15 } } }}>
+        {rooms.map((room, idx) => (
+          <motion.div key={room.name} initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: idx * 0.1 }}>
+            <Card className="flex flex-col h-full">
+              <div className="aspect-[4/3] w-full rounded-t-xl overflow-hidden">
+                <img src={room.images[0]} alt={room.name} className="object-cover w-full h-full" />
               </div>
-            </motion.div>
+              <div className="p-4 flex flex-col flex-1">
+                <h2 className="text-xl font-bold mb-2 text-amber-700">{room.name}</h2>
+                <p className="text-gray-700 text-base mb-2 flex-1">{room.description}</p>
+                <Button
+                  className="mt-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded shadow"
+                  onClick={() => {
+                    setRoomDetail(room);
+                    setCarouselIdx(0);
+                    setShowRoomModal(true);
+                  }}
+                >
+                  View Room Photos
+                </Button>
+              </div>
+            </Card>
           </motion.div>
-        </div>
-      </section>
+        ))}
+      </motion.section>
 
       {/* Amenities Section */}
-      <section id="amenities" className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="max-w-6xl mx-auto"
-          >
-            <motion.div variants={fadeInUp} className="text-center mb-16">
-              <Badge className="mb-4 bg-amber-100 text-amber-800 px-4 py-2">Facilities</Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                World-Class{" "}
-                <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                  Amenities
-                </span>
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Experience luxury and comfort with our comprehensive range of facilities and services
-              </p>
+      <motion.section className="max-w-4xl mx-auto px-2 sm:px-4 md:px-8 py-8" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 text-amber-700">Amenities</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {amenities.map((a, idx) => (
+            <motion.div key={a.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: idx * 0.08 }}>
+              <Card className="flex flex-col items-center justify-center p-4">
+                <a.icon className="w-8 h-8 mb-2 text-orange-500" />
+                <span className="font-semibold text-amber-700 mb-1">{a.name}</span>
+                <span className="text-xs text-gray-500 text-center">{a.desc}</span>
+              </Card>
             </motion.div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {amenities.map((amenity, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  whileHover={{ scale: 1.05 }}
-                  className="text-center p-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <amenity.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{amenity.name}</h3>
-                  <p className="text-gray-600">{amenity.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          ))}
         </div>
-      </section>
+      </motion.section>
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-white">
         <div className="container mx-auto px-4">
@@ -512,14 +446,6 @@ export default function HomePage() {
               </div>
               {/* Description */}
               <div className="mb-2 text-sm text-gray-700">{roomDetail.description}</div>
-              <div className="mb-2">
-                <span className="font-bold">Features:</span>
-                <ul className="list-disc pl-5 text-sm">
-                  {roomDetail.features.map((f: string, i: number) => (
-                    <li key={i}>{f}</li>
-                  ))}
-                </ul>
-              </div>
               <Button className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white mt-2" onClick={handleBookFromRoom}>
                 Book Now
               </Button>

@@ -1,13 +1,15 @@
 "use client"
 
+import { motion } from 'framer-motion';
+
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20">
-      <div className="container mx-auto px-4 max-w-3xl">
-        <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Privacy Policy</h1>
+    <motion.div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
+      <motion.div className="container mx-auto px-4 max-w-3xl" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Privacy Policy</h1>
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-2">1. Information We Collect</h2>
-          <ul className="list-disc pl-6 text-gray-700 text-lg">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-2">1. Information We Collect</h2>
+          <ul className="list-disc pl-4 sm:pl-6 text-gray-700 text-base sm:text-lg">
             <li>Personal Details: Name, address, phone number, email address, date of birth, nationality.</li>
             <li>Identification Documents: Passport, government-issued ID, visa (for foreign nationals).</li>
             <li>Booking Information: Room type, check-in/check-out dates, special requests, payment information.</li>
@@ -67,7 +69,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-2xl font-semibold mb-2">8. Changes to This Privacy Policy</h2>
           <p className="text-gray-700 text-lg">We reserve the right to update this Privacy Policy from time to time. Any changes will be posted on our website with the updated effective date.</p>
         </section>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 } 

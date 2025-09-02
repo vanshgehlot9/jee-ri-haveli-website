@@ -1,13 +1,15 @@
 "use client"
 
+import { motion } from 'framer-motion';
+
 export default function HotelPolicyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20">
-      <div className="container mx-auto px-4 max-w-3xl">
-        <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Hotel Policy</h1>
+    <motion.div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
+      <motion.div className="container mx-auto px-4 max-w-3xl" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Hotel Policy</h1>
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-2">Check-In and Check-Out</h2>
-          <ul className="list-disc pl-6 text-gray-700 text-lg">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-2">Check-In and Check-Out</h2>
+          <ul className="list-disc pl-4 sm:pl-6 text-gray-700 text-base sm:text-lg">
             <li><strong>Check-In:</strong> 11:00 AM</li>
             <li><strong>Check-Out:</strong> 10:00 AM. Kindly return your room key to the reception desk at check-out.</li>
           </ul>
@@ -37,7 +39,7 @@ export default function HotelPolicyPage() {
         <section>
           <p className="text-gray-700 text-lg">We appreciate your understanding and cooperation in adhering to the above regulations. These policies are in place to ensure a safe, comfortable, and enjoyable stay for all our valued guests.</p>
         </section>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 } 

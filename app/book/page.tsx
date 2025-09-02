@@ -80,19 +80,19 @@ export default function BookingPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [floorRooms, setFloorRooms] = useState({
     "Ground Floor": {
-      "Deluxe Room": { available: 2, total: 3, price: 2500, originalPrice: 3000 },
-      "Standard Room": { available: 1, total: 2, price: 1800, originalPrice: 2200 },
-      "Standard Room without Balcony": { available: 2, total: 3, price: 1500, originalPrice: 1800 }
+      "Deluxe Room": { available: 2, total: 3 },
+      "Standard Room": { available: 1, total: 2 },
+      "Standard Room without Balcony": { available: 2, total: 3 }
     },
     "First Floor": {
-      "Deluxe Room": { available: 3, total: 4, price: 2500, originalPrice: 3000 },
-      "Standard Room": { available: 2, total: 3, price: 1800, originalPrice: 2200 },
-      "Standard Room without Balcony": { available: 1, total: 2, price: 1500, originalPrice: 1800 }
+      "Deluxe Room": { available: 3, total: 4 },
+      "Standard Room": { available: 2, total: 3 },
+      "Standard Room without Balcony": { available: 1, total: 2 }
     },
     "Second Floor": {
-      "Deluxe Room": { available: 1, total: 2, price: 2500, originalPrice: 3000 },
-      "Standard Room": { available: 2, total: 2, price: 1800, originalPrice: 2200 },
-      "Standard Room without Balcony": { available: 3, total: 4, price: 1500, originalPrice: 1800 }
+      "Deluxe Room": { available: 1, total: 2 },
+      "Standard Room": { available: 2, total: 2 },
+      "Standard Room without Balcony": { available: 3, total: 4 }
     }
   })
   const [bookingData, setBookingData] = useState({
@@ -117,15 +117,12 @@ export default function BookingPage() {
   const today = new Date().toISOString().split('T')[0]
   const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]
 
-  // Calculate nights and total price
+  // Calculate nights
   const nights = bookingData.checkIn && bookingData.checkOut 
     ? Math.ceil((new Date(bookingData.checkOut).getTime() - new Date(bookingData.checkIn).getTime()) / (1000 * 60 * 60 * 24))
     : 0
-  
-  const selectedRoomData = selectedFloor && selectedRoom ? floorRooms[selectedFloor as keyof typeof floorRooms][selectedRoom as keyof typeof floorRooms[typeof selectedFloor]] : null
-  const totalPrice = nights * (selectedRoomData?.price || 0)
-  const discount = nights * ((selectedRoomData?.originalPrice || 0) - (selectedRoomData?.price || 0))
-  const finalTotal = totalPrice
+
+  const selectedRoomData = (selectedFloor && selectedRoom) ? (floorRooms as any)[selectedFloor as string]?.[selectedRoom as string] : null
 
   const handleDateChange = (field: string, value: string) => {
     setBookingData(prev => ({ ...prev, [field]: value }))
@@ -248,16 +245,16 @@ export default function BookingPage() {
         if (data) {
           // Merge with pricing data
           const updatedFloorRooms = Object.keys(data).reduce((acc, floor) => {
-            acc[floor] = {}
+            ;(acc as any)[floor] = {}
             Object.keys(data[floor]).forEach(roomType => {
-              acc[floor][roomType] = {
+              ;(acc as any)[floor][roomType] = {
                 ...data[floor][roomType],
-                price: floorRooms[floor as keyof typeof floorRooms]?.[roomType as keyof typeof floorRooms[typeof floor]]?.price || 2500,
-                originalPrice: floorRooms[floor as keyof typeof floorRooms]?.[roomType as keyof typeof floorRooms[typeof floor]]?.originalPrice || 3000
+                price: (floorRooms as any)[floor]?.[roomType]?.price || 2500,
+                originalPrice: (floorRooms as any)[floor]?.[roomType]?.originalPrice || 3000
               }
             })
             return acc
-          }, {} as typeof floorRooms)
+          }, {} as any)
           setFloorRooms(updatedFloorRooms)
         }
       } catch (error) {
@@ -407,13 +404,33 @@ export default function BookingPage() {
                         onClick={() => data.available > 0 && setSelectedRoom(roomType)}
                       >
                         <div className="flex items-start space-x-4">
-                          <div className="w-24 h-24 relative rounded-lg overflow-hidden flex-shrink-0">
+                          <div className="w-32 h-32 relative rounded-lg overflow-hidden flex-shrink-0">
+                            {/* Room image carousel */}
                             <Image
                               src={roomImages[roomType as keyof typeof roomImages][0]}
                               alt={roomType}
                               fill
                               className="object-cover"
                             />
+                            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+                              {roomImages[roomType as keyof typeof roomImages].slice(0,4).map((img, idx) => (
+                                <button
+                                  key={img}
+                                  type="button"
+                                  className={`w-4 h-4 rounded-full border-2 ${idx === 0 ? 'border-amber-600 bg-amber-200' : 'border-gray-300 bg-white'} focus:outline-none`}
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    // Show selected image in main image slot (simple version)
+                                    const imgs = roomImages[roomType as keyof typeof roomImages];
+                                    if (imgs && imgs[idx]) {
+                                      const temp = imgs[0];
+                                      imgs[0] = imgs[idx];
+                                      imgs[idx] = temp;
+                                    }
+                                  }}
+                                />
+                              ))}
+                            </div>
                           </div>
                           <div className="flex-1">
                             <h3 className="font-semibold text-lg">{roomType}</h3>
@@ -429,9 +446,6 @@ export default function BookingPage() {
                               </span>
                             </div>
                             <div className="flex items-center mt-2">
-                              <span className="text-2xl font-bold text-amber-600">₹{data.price}</span>
-                              <span className="text-sm text-gray-500 line-through ml-2">₹{data.originalPrice}</span>
-                              <Badge className="ml-2 bg-green-100 text-green-800">Save ₹{data.originalPrice - data.price}</Badge>
                               <Badge className={`ml-2 ${data.available > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                                 {data.available > 0 ? `${data.available} Available` : 'Fully Booked'}
                               </Badge>
@@ -801,40 +815,7 @@ export default function BookingPage() {
               </Card>
             )}
 
-            {/* Pricing Summary */}
-            {selectedRoomData && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <CreditCard className="w-5 h-5 mr-2 text-amber-600" />
-                    Pricing Summary
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Room Rate (per night)</span>
-                    <span>₹{selectedRoomData.price}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Number of Nights</span>
-                    <span>{nights}</span>
-                  </div>
-                  {discount > 0 && (
-                    <div className="flex justify-between text-green-600">
-                      <span>Discount</span>
-                      <span>-₹{discount}</span>
-                    </div>
-                  )}
-                  <div className="border-t pt-3">
-                    <div className="flex justify-between font-semibold text-lg">
-                      <span>Total Amount</span>
-                      <span>₹{finalTotal}</span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">* All taxes included</p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+            {/* Pricing removed for off-season: no rates shown */}
 
             {/* Security & Trust */}
             <Card>

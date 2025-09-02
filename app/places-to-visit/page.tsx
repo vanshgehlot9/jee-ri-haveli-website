@@ -198,9 +198,9 @@ export default function PlacesToVisitPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
+    <motion.div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
       {/* Hero Section */}
-      <section className="relative w-full h-[40vh] sm:h-[60vh] min-h-[250px] md:min-h-[350px] flex items-center justify-center overflow-hidden mb-10 px-2">
+      <motion.section className="relative w-full h-[32vh] sm:h-[60vh] min-h-[180px] md:min-h-[350px] flex items-center justify-center overflow-hidden mb-6 px-2" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
         <Image
           src="/images/WhatsApp Image 2025-07-11 at 14.29.59.jpeg"
           alt="Mehrangarh Fort, Jodhpur"
@@ -210,24 +210,24 @@ export default function PlacesToVisitPage() {
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10" />
-        <div className="relative z-20 text-center text-white px-4 w-full flex flex-col items-center justify-center">
-          <span className="text-lg md:text-xl font-semibold text-amber-200 mb-2 drop-shadow">Explore Jodhpur</span>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-2 drop-shadow-lg">Places to Visit in Jodhpur</h1>
-          <p className="max-w-2xl text-base md:text-lg text-white/90 drop-shadow mb-2">
+        <div className="relative z-20 text-center text-white px-2 w-full flex flex-col items-center justify-center">
+          <span className="text-base sm:text-lg md:text-xl font-semibold text-amber-200 mb-2 drop-shadow">Explore Jodhpur</span>
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-2 drop-shadow-lg">Places to Visit in Jodhpur</h1>
+          <p className="max-w-2xl text-sm sm:text-base md:text-lg text-white/90 drop-shadow mb-2">
             Discover the rich history, vibrant culture, and breathtaking sights of Jodhpur. From majestic forts to tranquil lakes, each destination offers a unique glimpse into the heart of Rajasthan.
           </p>
         </div>
-      </section>
+      </motion.section>
       {/* Main Content */}
-      <div className="max-w-3xl mx-auto px-4 pb-16">
+      <motion.div className="max-w-3xl mx-auto px-2 sm:px-4 pb-16" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <Badge className="mb-4 bg-orange-100 text-orange-800 px-4 py-2">Explore Jodhpur</Badge>
-          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
             Places to Visit in Jodhpur
           </h1>
         </motion.div>
@@ -271,7 +271,7 @@ export default function PlacesToVisitPage() {
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Detailed Modal */}
       <Dialog open={!!selectedPlace} onOpenChange={() => setSelectedPlace(null)}>
@@ -367,6 +367,6 @@ export default function PlacesToVisitPage() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   )
 } 

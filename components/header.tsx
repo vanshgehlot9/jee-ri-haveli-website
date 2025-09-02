@@ -74,13 +74,7 @@ export default function Header({ onBookNowClick }: HeaderProps) {
             </button>
 
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden md:block">
-              <Link href="/book">
-                <Button 
-                  className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-6 py-2 rounded-full shadow-lg" 
-                >
-                  Book Now
-                </Button>
-              </Link>
+              {/* Removed Book Now button from desktop header */}
             </motion.div>
           </div>
         </div>
@@ -107,7 +101,6 @@ export default function Header({ onBookNowClick }: HeaderProps) {
                 { label: "Gallery", href: "/gallery" },
                 { label: "Location", href: "/location" },
                 { label: "Contact", href: "/contact" },
-                { label: "Book Now", href: "/book" },
               ].map((item) => (
                 <Link
                   key={item.label}

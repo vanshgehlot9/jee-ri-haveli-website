@@ -1,11 +1,13 @@
 "use client"
 
+import { motion } from 'framer-motion';
+
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20">
-      <div className="container mx-auto px-4 max-w-3xl">
-        <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Terms & Conditions</h1>
-        <ol className="list-decimal pl-6 text-gray-700 text-lg space-y-4">
+    <motion.div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 py-20" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
+      <motion.div className="container mx-auto px-4 max-w-3xl" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Terms & Conditions</h1>
+        <ol className="list-decimal pl-4 sm:pl-6 text-gray-700 text-base sm:text-lg space-y-4">
           <li>
             <strong>Reservation and Payment</strong>
             <ul className="list-disc pl-6">
@@ -87,7 +89,7 @@ export default function TermsPage() {
             </ul>
           </li>
         </ol>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 } 
