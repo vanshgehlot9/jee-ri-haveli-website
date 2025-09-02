@@ -76,9 +76,10 @@ export default function HomePage() {
     {
       name: "Standard Room",
       images: [
-        "/images/IMG_4643.JPG",
-        "images/IMG_4646.JPG",
-        "images/IMG_4639.JPG",
+        "/images/ASM_7800.jpg",
+        "images/ASM_7801.jpg",
+        "images/ASM_7811.jpg",
+        "images/ASM_7814.jpg",
       ],
       description: "Our Standard Room is designed for comfort and convenience, offering a cozy sitting area, balcony, and beautiful city views. Ideal for business travelers or families on a budget.",
       features: ["City View", "Balcony", "Sitting Area"],
