@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   description: "Experience the grandeur of Rajasthani heritage with modern luxury and comfort at Jee Ri Haveli",
       generator: 'v0.dev',
   verification: {
-    google: 'google0b7391e86ddbcffe',
+     google: 'MwL5d0JwZBLQrLsSPQrni4Wwqp1l-wDiwaqV9WLa6fA',
+
   },
 }
 
